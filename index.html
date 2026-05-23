@@ -507,32 +507,21 @@ textarea{resize:vertical;min-height:70px}
       <div class="deck-grid" id="deck-grid"></div>
       <div style="background:linear-gradient(135deg,#0d1a2a,#0d2a1a);border:2px dashed #2a5a7a;border-radius:var(--r);padding:16px;margin-bottom:12px">
         <div style="font-size:13px;font-weight:700;color:#90caf9;margin-bottom:2px;display:flex;align-items:center;gap:6px"><i class="ti ti-sparkles" style="font-size:15px"></i>AI Reviewer Generator</div>
-        <div style="font-size:11px;color:var(--t3);margin-bottom:12px">Upload a file OR paste/type your notes — AI generates flashcards automatically</div>
-        <!-- Input mode tabs -->
-        <div style="display:flex;gap:4px;margin-bottom:12px;background:#0a1520;border-radius:8px;padding:3px">
-          <button id="ai-tab-file" onclick="aiSwitchTab('file')" style="flex:1;padding:7px;border-radius:6px;border:none;background:linear-gradient(135deg,#1a4a7a,#1a5a3a);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px"><i class="ti ti-upload" style="font-size:13px"></i>Upload File</button>
-          <button id="ai-tab-text" onclick="aiSwitchTab('text')" style="flex:1;padding:7px;border-radius:6px;border:none;background:transparent;color:#7a9aaa;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px"><i class="ti ti-pencil" style="font-size:13px"></i>Paste / Type</button>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:8px">Paste your notes below — AI generates flashcards automatically</div>
+        <div id="ai-key-row" style="margin-bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <input id="ai-api-key" type="password" class="inp-sm" style="flex:1;min-width:180px;font-size:11px;padding:7px 10px;border-color:#2a5a7a" placeholder="🔑 Anthropic API key (sk-ant-...)">
+          <button onclick="aiSaveKey()" style="background:#1a4a2a;border:1px solid #3a8a4a;border-radius:var(--rs);padding:7px 12px;color:#7deb8f;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap">Save Key</button>
+          <a href="https://console.anthropic.com/keys" target="_blank" style="font-size:10px;color:#64b5f6;text-decoration:none;white-space:nowrap">Get free key ↗</a>
         </div>
-        <!-- File upload panel -->
-        <div id="ai-panel-file">
-          <label style="display:flex;align-items:center;justify-content:center;gap:8px;background:#0f2030;border:2px dashed #2a6a9a;border-radius:var(--r);padding:18px;color:#90caf9;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:border-color .2s" onmouseover="this.style.borderColor='#64b5f6'" onmouseout="this.style.borderColor='#2a6a9a'">
-            <i class="ti ti-file-upload" style="font-size:22px"></i>
-            <span>Click to upload PDF, PPTX, DOCX, or TXT</span>
-            <input type="file" id="ai-file-input" accept=".pdf,.pptx,.docx,.txt,.doc" style="display:none">
-          </label>
-          <div id="ai-upload-name" style="font-size:11px;color:#90caf9;margin-top:8px;min-height:18px;text-align:center"></div>
-        </div>
-        <!-- Text paste panel -->
-        <div id="ai-panel-text" style="display:none">
-          <textarea id="ai-paste-text" style="width:100%;min-height:120px;background:#0f2030;border:1px solid #2a5a7a;border-radius:var(--rs);padding:10px;color:#cce8cc;font-family:inherit;font-size:12px;resize:vertical;outline:none;line-height:1.6" placeholder="Paste your notes, lecture text, definitions, or any study material here... AI will generate flashcards from it!"></textarea>
-          <div style="font-size:10px;color:var(--t3);margin-top:4px;text-align:right" id="ai-paste-count">0 characters</div>
-        </div>
-        <!-- Deck selector + Generate button — always visible -->
-        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
+        <div id="ai-key-saved" style="font-size:10px;color:#7deb8f;margin-bottom:8px;display:none">✅ API key saved!</div>
+        <textarea id="ai-paste-text" style="width:100%;min-height:100px;background:#0f2030;border:1px solid #2a5a7a;border-radius:var(--rs);padding:10px;color:#cce8cc;font-family:inherit;font-size:12px;resize:vertical;outline:none;line-height:1.6;margin-bottom:4px" placeholder="I-paste mo dito ang iyong notes, lecture content, o definitions..."></textarea>
+        <div style="font-size:10px;color:var(--t3);text-align:right;margin-bottom:8px" id="ai-paste-count">0 characters</div>
+        <div style="font-size:11px;color:#7a9aaa;margin-bottom:8px;display:flex;align-items:center;gap:5px"><i class="ti ti-upload" style="font-size:12px"></i>Or upload a file: <label style="color:#90caf9;cursor:pointer;text-decoration:underline">click here<input type="file" id="ai-file-input" accept=".pdf,.pptx,.docx,.txt" style="display:none"></label><span id="ai-upload-name" style="color:#64b5f6"></span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
           <select id="ai-deck-select" class="inp-sm" style="flex:1;min-width:140px;font-size:12px;padding:8px 10px"><option value="">— Choose deck —</option></select>
           <button class="btn" id="ai-gen-btn" style="background:linear-gradient(135deg,#1a4a7a,#1a5a3a);border-color:#64b5f6;color:#fff;white-space:nowrap"><i class="ti ti-sparkles" style="font-size:13px"></i>Generate Cards</button>
         </div>
-        <div id="ai-status" style="font-size:11px;color:var(--blu);margin-top:8px;display:none;text-align:center"></div>
+        <div id="ai-status" style="font-size:12px;margin-top:10px;display:none;text-align:center;padding:8px;border-radius:6px"></div>
         <div id="ai-prog-wrap" style="margin-top:8px;display:none"><div style="height:4px;background:#0a1520;border-radius:2px;overflow:hidden"><div id="ai-prog-fill" style="height:100%;background:linear-gradient(90deg,#64b5f6,#5ddb6f);width:0%;transition:width .5s"></div></div></div>
       </div>
     </div>
@@ -846,7 +835,11 @@ document.querySelectorAll('.tab').forEach(t=>{
     if(tab==='urgent')renderUrgent();
     if(tab==='focus')renderSessions();
     if(tab==='insights')renderInsights();
-    if(tab==='reviewcall')renderDecks();
+    if(tab==='reviewcall'){renderDecks();setTimeout(()=>{
+      const k=localStorage.getItem('rc_api_key');
+      const el=document.getElementById('ai-api-key');
+      if(el&&k){el.placeholder='🔑 API key saved ✅';el.value='';}
+    },50);}
   };
 });
 
@@ -1178,140 +1171,191 @@ document.getElementById('sched-cancel').onclick=()=>document.getElementById('sch
 document.getElementById('sched-save').onclick=()=>{const ds=document.getElementById('sched-date').value;if(!ds)return alert('Pick a date');const time=document.getElementById('sched-time').value||'18:00';const projId=document.getElementById('sched-proj').value;const dk=D.decks.find(d=>d.id===schedDeckId);if(!dk)return;let proj=D.projects.find(p=>p.id===projId);if(!proj){if(!D.projects.length)D.projects.push({id:uid(),name:'My Tasks',tasks:[]});proj=D.projects[0];}const nt={id:uid(),name:`Review: ${dk.name}`,done:false,priority:'none',deadline:ds,deadlineTime:time,note:`${(dk.cards||[]).length} cards`,addedDate:phtToday(),isDeckReview:true,deckId:schedDeckId};proj.tasks.push(nt);if(!D.dailyLog[phtToday()])D.dailyLog[phtToday()]={added:[],done:[]};D.dailyLog[phtToday()].added.push(nt.id);document.getElementById('sched-modal').classList.remove('show');save();renderStats();showToast('Scheduled! 📅',`Review deck added for ${ds} at ${time}`);};
 
 // AI GENERATOR
-let aiFile=null;
-let aiMode='file';
+let aiFile = null;
 
-function aiSwitchTab(mode){
-  aiMode=mode;
-  const tabFile=document.getElementById('ai-tab-file');
-  const tabText=document.getElementById('ai-tab-text');
-  const panelFile=document.getElementById('ai-panel-file');
-  const panelText=document.getElementById('ai-panel-text');
-  if(mode==='file'){
-    tabFile.style.background='linear-gradient(135deg,#1a4a7a,#1a5a3a)';tabFile.style.color='#fff';
-    tabText.style.background='transparent';tabText.style.color='#7a9aaa';
-    panelFile.style.display='block';panelText.style.display='none';
-  } else {
-    tabText.style.background='linear-gradient(135deg,#1a4a7a,#1a5a3a)';tabText.style.color='#fff';
-    tabFile.style.background='transparent';tabFile.style.color='#7a9aaa';
-    panelFile.style.display='none';panelText.style.display='block';
-    document.getElementById('ai-paste-text').focus();
-  }
+function aiSaveKey(){
+  const k = document.getElementById('ai-api-key').value.trim();
+  if(!k){ alert('Please enter your API key first.'); return; }
+  localStorage.setItem('rc_api_key', k);
+  document.getElementById('ai-key-saved').style.display = 'block';
+  document.getElementById('ai-api-key').value = '●'.repeat(20);
+  setTimeout(()=>{ document.getElementById('ai-key-saved').style.display='none'; }, 3000);
 }
 
-document.getElementById('ai-file-input').onchange=function(){
-  aiFile=this.files[0];
-  if(aiFile){
-    document.getElementById('ai-upload-name').innerHTML='<i class="ti ti-paperclip" style="font-size:11px"></i> '+aiFile.name;
+function aiGetKey(){
+  return localStorage.getItem('rc_api_key') || document.getElementById('ai-api-key').value.trim();
+}
+
+// Load saved key hint on startup
+(function(){
+  const k = localStorage.getItem('rc_api_key');
+  if(k){
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const el = document.getElementById('ai-api-key');
+      if(el) el.placeholder = '🔑 API key saved ✅';
+    });
+  }
+})();
+
+document.getElementById('ai-paste-text').addEventListener('input', function(){
+  document.getElementById('ai-paste-count').textContent = this.value.length + ' characters';
+});
+
+document.getElementById('ai-file-input').onchange = async function(){
+  const file = this.files[0];
+  if(!file) return;
+  aiFile = file;
+  document.getElementById('ai-upload-name').textContent = ' ' + file.name;
+  const status = document.getElementById('ai-status');
+  status.style.display = 'block';
+  status.style.background = '#0f2030';
+  status.style.color = '#90caf9';
+  status.textContent = '📖 Reading ' + file.name + '...';
+  try {
+    const text = await extractTextFromFile(file);
+    if(text && text.length > 30){
+      document.getElementById('ai-paste-text').value = text;
+      document.getElementById('ai-paste-count').textContent = text.length + ' characters';
+      status.textContent = '✅ Extracted ' + text.length.toLocaleString() + ' characters — review above then click Generate Cards!';
+      status.style.color = '#7deb8f';
+    } else {
+      status.textContent = '⚠️ Could not extract text from file. Please paste your content manually in the text area.';
+      status.style.color = '#ef9a9a';
+    }
+  } catch(e) {
+    status.textContent = '⚠️ Error reading file: ' + e.message;
+    status.style.color = '#ef9a9a';
   }
 };
 
-document.getElementById('ai-paste-text').addEventListener('input',function(){
-  document.getElementById('ai-paste-count').textContent=this.value.length+' characters';
-});
-
 function populateAiDeckSelect(){
-  const sel=document.getElementById('ai-deck-select');
-  sel.innerHTML='<option value="">— Choose deck —</option>'+D.decks.map(d=>`<option value="${d.id}">${d.emoji||'📚'} ${esc(d.name)}</option>`).join('');
+  const sel = document.getElementById('ai-deck-select');
+  sel.innerHTML = '<option value="">— Choose deck —</option>' + D.decks.map(d =>
+    `<option value="${d.id}">${d.emoji||'📚'} ${esc(d.name)}</option>`
+  ).join('');
 }
 
-document.getElementById('ai-gen-btn').onclick=async()=>{
-  const deckId=document.getElementById('ai-deck-select').value;
-  const status=document.getElementById('ai-status');
-  const progWrap=document.getElementById('ai-prog-wrap');
-  const progFill=document.getElementById('ai-prog-fill');
-  const btn=document.getElementById('ai-gen-btn');
-  status.style.display='block';status.style.color='#90caf9';
-  if(!deckId){status.textContent='⚠️ Please choose a deck first!';return;}
-  const dk=D.decks.find(d=>d.id===deckId);if(!dk)return;
+document.getElementById('ai-gen-btn').onclick = async () => {
+  const deckId = document.getElementById('ai-deck-select').value;
+  const status = document.getElementById('ai-status');
+  const progWrap = document.getElementById('ai-prog-wrap');
+  const progFill = document.getElementById('ai-prog-fill');
+  const btn = document.getElementById('ai-gen-btn');
 
-  let text='';
-  btn.disabled=true;
-  progWrap.style.display='block';progFill.style.width='10%';
+  const showStatus = (msg, color) => {
+    status.style.display = 'block';
+    status.style.color = color || '#90caf9';
+    status.style.background = color === '#ef9a9a' ? '#2a0f0f' : color === '#7deb8f' ? '#0f2a14' : '#0f2030';
+    status.textContent = msg;
+  };
 
-  if(aiMode==='text'){
-    text=document.getElementById('ai-paste-text').value.trim();
-    if(!text||text.length<30){
-      status.textContent='⚠️ Please enter at least 30 characters of study material.';
-      btn.disabled=false;progFill.style.width='0%';return;
-    }
-    progFill.style.width='40%';
-  } else {
-    if(!aiFile){
-      status.textContent='⚠️ Please upload a file first.';
-      btn.disabled=false;progFill.style.width='0%';return;
-    }
-    status.textContent='📖 Reading '+aiFile.name+'...';
-    try{
-      text=await extractTextFromFile(aiFile);
-    }catch(err){
-      status.textContent='⚠️ Could not read file: '+err.message;
-      btn.disabled=false;progFill.style.width='0%';return;
-    }
-    if(!text||text.length<30){
-      status.textContent='⚠️ Could not extract text from this file. Try the "Paste / Type" tab instead — paste your content there manually.';
-      btn.disabled=false;progFill.style.width='0%';return;
-    }
-    status.textContent='📄 Extracted '+text.length.toLocaleString()+' characters...';
-    progFill.style.width='40%';
+  if(!deckId){ showStatus('⚠️ Please choose a deck first!', '#ef9a9a'); return; }
+  const dk = D.decks.find(d => d.id === deckId);
+  if(!dk) return;
+
+  const text = document.getElementById('ai-paste-text').value.trim();
+  if(!text || text.length < 30){
+    showStatus('⚠️ Please paste or type your study notes first (at least 30 characters).', '#ef9a9a');
+    return;
   }
 
-  status.textContent='🤖 AI is generating flashcards...';
-  try{
-    text=text.slice(0,8000);
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:2500,
-        messages:[{role:'user',content:'You are a flashcard generator. Based on the study content below, generate exactly 10 multiple-choice flashcards.
+  btn.disabled = true;
+  progWrap.style.display = 'block';
+  progFill.style.width = '20%';
+  showStatus('🤖 AI is generating flashcards...', '#90caf9');
 
-RULES:
-- Test key concepts, definitions, and terms from the content
-- Each card: question (q), correct answer (a), and exactly 4 choices total (correct + 3 wrong)
-- The choices array MUST include the correct answer
-- Keep answers short (1-6 words)
-- Return ONLY valid JSON array, no markdown, no explanation
+  const apiKey = aiGetKey();
+  if(!apiKey){
+    showStatus('⚠️ Please enter your Anthropic API key above. Get a free one at console.anthropic.com', '#ef9a9a');
+    btn.disabled = false; progFill.style.width = '0%'; return;
+  }
 
-FORMAT:
-[{"q":"Question?","a":"Correct Answer","choices":["Correct Answer","Wrong 1","Wrong 2","Wrong 3"]},...]
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2500,
+        messages: [{
+          role: 'user',
+          content: `Generate exactly 10 multiple-choice flashcards from this study content. Return ONLY a valid JSON array, no markdown, no extra text.
 
-CONTENT:
-'+text+'
+Each item must have:
+- "q": the question
+- "a": the correct answer (short, 1-6 words)  
+- "choices": array of exactly 4 items — the correct answer MUST be included among them
 
-Return ONLY the JSON array.'}]
+Example format:
+[{"q":"What is the powerhouse of the cell?","a":"Mitochondria","choices":["Mitochondria","Nucleus","Ribosome","Golgi body"]}]
+
+Study content:
+${text.slice(0, 8000)}
+
+Return ONLY the JSON array:`
+        }]
       })
     });
-    progFill.style.width='80%';
-    const data=await resp.json();
-    if(data.error){status.textContent='⚠️ API Error: '+data.error.message;btn.disabled=false;return;}
-    const raw=data.content&&data.content[0]?data.content[0].text:'';
-    let cards=[];
-    try{
-      const m=raw.match(/\[[\s\S]*\]/);
-      if(m)cards=JSON.parse(m[0]);
-    }catch(e){status.textContent='⚠️ Error parsing AI response. Try again.';progFill.style.width='0%';btn.disabled=false;return;}
-    if(!cards.length){status.textContent='⚠️ AI returned no cards. Try again.';progFill.style.width='0%';btn.disabled=false;return;}
-    let added=0;
-    cards.forEach(c=>{
-      if(c.q&&c.a&&c.choices&&c.choices.length>=3){
-        const ch=c.choices.includes(c.a)?c.choices:[c.a,...c.choices.slice(0,3)];
-        dk.cards.push({id:uid(),q:c.q,a:c.a,choices:ch.slice(0,4)});
+
+    progFill.style.width = '80%';
+    const data = await resp.json();
+
+    if(data.error){
+      showStatus('⚠️ API Error: ' + data.error.message, '#ef9a9a');
+      progFill.style.width = '0%';
+      btn.disabled = false;
+      return;
+    }
+
+    const raw = (data.content && data.content[0]) ? data.content[0].text : '';
+    let cards = [];
+    try {
+      const match = raw.match(/\[[\s\S]*\]/);
+      if(match) cards = JSON.parse(match[0]);
+    } catch(e) {
+      showStatus('⚠️ Could not parse AI response. Try again.', '#ef9a9a');
+      progFill.style.width = '0%';
+      btn.disabled = false;
+      return;
+    }
+
+    if(!cards.length){
+      showStatus('⚠️ AI returned 0 cards. Try with more detailed notes.', '#ef9a9a');
+      progFill.style.width = '0%';
+      btn.disabled = false;
+      return;
+    }
+
+    let added = 0;
+    cards.forEach(c => {
+      if(c.q && c.a && Array.isArray(c.choices) && c.choices.length >= 3){
+        let ch = [...c.choices];
+        if(!ch.includes(c.a)) ch = [c.a, ...ch.slice(0,3)];
+        dk.cards.push({ id: uid(), q: c.q, a: c.a, choices: ch.slice(0,4) });
         added++;
       }
     });
-    progFill.style.width='100%';
-    status.style.color='#7deb8f';
-    status.textContent='✅ Generated '+added+' flashcards added to "'+dk.name+'"!';
-    save();if(currentDeckId===deckId)renderCardList();renderDecks();
-    setTimeout(()=>{progFill.style.width='0%';status.style.color='#90caf9';},4000);
-  }catch(e){
-    status.style.color='#ef9a9a';
-    status.textContent='⚠️ '+(e.message&&(e.message.includes('fetch')||e.message.includes('Failed'))?'Network error — check your connection.':'Error: '+e.message);
-    progFill.style.width='0%';
+
+    progFill.style.width = '100%';
+    showStatus(`✅ ${added} flashcards added to "${dk.name}"! 🎉`, '#7deb8f');
+    save();
+    if(currentDeckId === deckId) renderCardList();
+    renderDecks();
+    setTimeout(() => { progFill.style.width = '0%'; }, 3000);
+
+  } catch(e) {
+    const msg = (e.message && (e.message.includes('fetch') || e.message.includes('Failed')))
+      ? '⚠️ Network error. Check your internet connection.'
+      : '⚠️ Error: ' + e.message;
+    showStatus(msg, '#ef9a9a');
+    progFill.style.width = '0%';
   }
-  btn.disabled=false;
+  btn.disabled = false;
 };
 
 async function extractTextFromFile(file){
