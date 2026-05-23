@@ -1171,7 +1171,8 @@ document.getElementById('ai-gen-btn').onclick=async()=>{
   document.getElementById('ai-gen-btn').disabled=true;
   try{
     let text='';if(aiFile.name.endsWith('.txt'))text=await aiFile.text();else text=await extractTextFromFile(aiFile);
-    if(!text||text.length<50){status.textContent='⚠️ Could not extract text. Try a .txt file.';document.getElementById('ai-gen-btn').disabled=false;return;}
+    if(!text||text.length<50){status.textContent='⚠️ Could not extract text from this file. For PPTX, make sure it has text slides. Try saving your content as a .txt file if it still fails.';document.getElementById('ai-gen-btn').disabled=false;return;}
+    status.textContent=`📄 Extracted ${text.length} characters — sending to AI...`;
     text=text.slice(0,8000);progFill.style.width='50%';status.textContent='🤖 AI is generating flashcards...';
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:`You are a flashcard generator for Filipino students. Based on the content below, generate exactly 10 multiple-choice flashcards.\n\nRULES:\n1. Every question MUST start with "WHAT IS/ARE" — fill-in-the-blank style\n2. Each card: question, correct answer (1-5 words), 3 wrong choices\n3. Focus on key terms, definitions, concepts\n4. Return ONLY valid JSON array, no markdown\n\nFORMAT:\n[{"q":"WHAT IS ___ that stores data in tree structure?","a":"Hierarchical model","choices":["Hierarchical model","Network model","Relational model","Object model"]},...]\n\nCONTENT:\n${text}\n\nReturn ONLY the JSON array.`}]})});
     progFill.style.width='80%';const data=await resp.json();const raw=data.content?.[0]?.text||'[]';
@@ -1189,7 +1190,38 @@ document.getElementById('ai-gen-btn').onclick=async()=>{
   document.getElementById('ai-gen-btn').disabled=false;
 };
 async function extractTextFromFile(file){
-  if(file.name.endsWith('.txt')||file.type==='text/plain')return file.text();
+  if(file.name.endsWith('.txt')||file.type==='text/plain') return file.text();
+  if(file.name.endsWith('.pptx')||file.name.endsWith('.docx')){
+    try{
+      if(!window.JSZip){
+        await new Promise((res,rej)=>{
+          const s=document.createElement('script');
+          s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+          s.onload=res;s.onerror=rej;document.head.appendChild(s);
+        });
+      }
+      const buf=await file.arrayBuffer();
+      const zip=await JSZip.loadAsync(buf);
+      let text='';
+      if(file.name.endsWith('.pptx')){
+        const slideFiles=Object.keys(zip.files).filter(n=>n.match(/^ppt\/slides\/slide\d+\.xml$/)).sort();
+        for(const sf of slideFiles){
+          const xml=await zip.files[sf].async('string');
+          const matches=xml.match(/<a:t[^>]*>([^<]+)<\/a:t>/g)||[];
+          matches.forEach(m=>{const t=m.replace(/<[^>]+>/g,'').trim();if(t)text+=t+' ';});
+          text+='\n';
+        }
+      } else {
+        if(zip.files['word/document.xml']){
+          const xml=await zip.files['word/document.xml'].async('string');
+          const matches=xml.match(/<w:t[^>]*>([^<]+)<\/w:t>/g)||[];
+          matches.forEach(m=>{const t=m.replace(/<[^>]+>/g,'').trim();if(t)text+=t+' ';});
+        }
+      }
+      text=text.replace(/ {3,}/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+      return text||'';
+    }catch(e){console.error('ZIP extract error:',e);return '';}
+  }
   return new Promise(resolve=>{
     const reader=new FileReader();
     reader.onload=e=>{
@@ -1199,10 +1231,10 @@ async function extractTextFromFile(file){
         for(let i=0;i<bytes.length;i++){
           const b=bytes[i];
           if(b>=32&&b<127){run+=String.fromCharCode(b);}
-          else if(b===10||b===13){if(run.length>3){text+=run+'\n';}run='';}
-          else{if(run.length>3){text+=run+' ';}run='';}
+          else if(b===10||b===13){if(run.length>4){text+=run+'\n';}run='';}
+          else{if(run.length>4){text+=run+' ';}run='';}
         }
-        if(run.length>3)text+=run;
+        if(run.length>4)text+=run;
         text=text.replace(/[^\x20-\x7E\n]/g,' ').replace(/ {4,}/g,' ').replace(/\n{3,}/g,'\n\n').trim();
         resolve(text);
       }catch(e){resolve('');}
