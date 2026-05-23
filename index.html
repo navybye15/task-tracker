@@ -268,38 +268,39 @@ textarea{resize:vertical;min-height:70px}
 .fci-del:hover{color:var(--red)}
 
 /* REVIEW MODE */
-#review-mode{display:none;position:fixed;inset:0;background:var(--bg);z-index:500;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#review-mode{display:none;position:fixed;inset:0;background:#111c11;z-index:500;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #review-mode.show{display:flex}
-.rm-header{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);background:var(--bg2)}
-.rm-title{font-size:13px;font-weight:600;color:var(--blu)}
-.rm-close{background:none;border:none;color:var(--t3);cursor:pointer;font-size:20px;display:flex;align-items:center;touch-action:manipulation}
-.rm-progress{position:absolute;top:52px;left:0;right:0;height:3px;background:var(--bg3)}
-.rm-progress-fill{height:100%;background:linear-gradient(90deg,var(--blu),var(--g));transition:width .4s ease}
+.rm-header{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2a3a2a;background:#172017}
+.rm-title{font-size:13px;font-weight:600;color:#90caf9}
+.rm-close{background:none;border:none;color:#a0c0a0;cursor:pointer;font-size:20px;display:flex;align-items:center;touch-action:manipulation}
+.rm-progress{position:absolute;top:52px;left:0;right:0;height:4px;background:#1e2e1e}
+.rm-progress-fill{height:100%;background:linear-gradient(90deg,#64b5f6,#5ddb6f);transition:width .4s ease}
 .rm-body{margin-top:70px;width:100%;max-width:500px;display:flex;flex-direction:column;align-items:center;gap:14px}
-.rm-session-info{font-size:11px;color:var(--t3);text-align:center}
-.rm-card{background:var(--bg2);border:2px solid var(--bdr);border-radius:14px;padding:24px 20px;text-align:center;width:100%;min-height:110px;display:flex;align-items:center;justify-content:center;transition:all .3s;position:relative}
+.rm-session-info{font-size:11px;color:#7a9a7a;text-align:center}
+.rm-counter{font-size:12px;color:#90caf9;font-weight:600}
+.rm-card{background:#1a2e1a;border:2px solid #2e4a2e;border-radius:14px;padding:28px 24px;text-align:center;width:100%;min-height:120px;display:flex;align-items:center;justify-content:center;transition:all .3s;position:relative;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .rm-card.shake{animation:shake .4s ease}
-.rm-card.correct-flash{border-color:var(--g2);background:#0d2010;animation:popIn .3s ease}
+.rm-card.correct-flash{border-color:#5ddb6f!important;background:#0f2a14!important;box-shadow:0 0 24px rgba(93,219,111,.2)!important;animation:popIn .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-@keyframes popIn{0%{transform:scale(.95)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+@keyframes popIn{0%{transform:scale(.95)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.rm-question{font-size:15px;font-weight:600;color:var(--t);line-height:1.5}
-.rm-choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
-.rm-choice{background:var(--bg2);border:2px solid var(--bdr);border-radius:var(--r);padding:11px 13px;font-size:12px;color:var(--t);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;touch-action:manipulation}
-.rm-choice:hover:not(:disabled){border-color:var(--blu);background:var(--bg3);color:#90caf9}
-.rm-choice.correct{border-color:var(--g2)!important;background:#0d2010!important;color:var(--g)!important}
-.rm-choice.wrong{border-color:var(--red)!important;background:#2a1010!important;color:var(--red)!important}
+.rm-question{font-size:16px;font-weight:700;color:#e8f5e8;line-height:1.6}
+.rm-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.rm-choice{background:#1e2e1e;border:2px solid #344a34;border-radius:var(--r);padding:13px 15px;font-size:13px;color:#cce8cc;cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;touch-action:manipulation;font-weight:500}
+.rm-choice:hover:not(:disabled){border-color:#64b5f6;background:#1a2a3a;color:#90caf9;transform:translateY(-1px);box-shadow:0 4px 12px rgba(100,181,246,.15)}
+.rm-choice.correct{border-color:#5ddb6f!important;background:#0f2a14!important;color:#7deb8f!important;box-shadow:0 0 12px rgba(93,219,111,.25)!important}
+.rm-choice.wrong{border-color:#ef5350!important;background:#2a0f0f!important;color:#ef9a9a!important}
 .rm-choice:disabled{cursor:default}
-.rm-feedback{text-align:center;min-height:38px}
-.rm-feedback-msg{font-size:15px;font-weight:700}
-.rm-feedback-sub{font-size:12px;color:var(--t3);margin-top:2px}
-.rm-next-btn{background:var(--g3);border:1px solid var(--g2);border-radius:var(--r);padding:11px 26px;color:#d4f7d4;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;display:none;touch-action:manipulation}
+.rm-feedback{text-align:center;min-height:44px}
+.rm-feedback-msg{font-size:16px;font-weight:700}
+.rm-feedback-sub{font-size:13px;color:#7a9a7a;margin-top:3px}
+.rm-next-btn{background:#2d6a3a;border:1px solid #5ddb6f;border-radius:var(--r);padding:12px 30px;color:#d4f7d4;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:none;touch-action:manipulation;letter-spacing:.3px}
 .rm-next-btn.show{display:block}
-.rm-next-btn:hover{background:var(--g2)}
+.rm-next-btn:hover{background:#3a8a4a;box-shadow:0 4px 14px rgba(93,219,111,.2)}
 .rm-session-end{display:none;flex-direction:column;align-items:center;gap:12px;text-align:center;width:100%;max-width:380px}
 .rm-session-end.show{display:flex}
-.rm-end-icon{font-size:48px}.rm-end-title{font-size:20px;font-weight:700;color:var(--g)}.rm-end-score{font-size:30px;font-weight:700;color:var(--g)}
-.rm-end-sub{font-size:13px;color:var(--t2);line-height:1.6}
+.rm-end-icon{font-size:54px}.rm-end-title{font-size:22px;font-weight:700;color:#7deb8f}.rm-end-score{font-size:34px;font-weight:700;color:#7deb8f}
+.rm-end-sub{font-size:13px;color:#a8cca8;line-height:1.7}
 .rm-end-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .particle{position:fixed;pointer-events:none;z-index:9999;font-size:20px;animation:particleFly 1s ease-out forwards}
 @keyframes particleFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(.5)}}
@@ -1172,16 +1173,43 @@ document.getElementById('ai-gen-btn').onclick=async()=>{
     let text='';if(aiFile.name.endsWith('.txt'))text=await aiFile.text();else text=await extractTextFromFile(aiFile);
     if(!text||text.length<50){status.textContent='⚠️ Could not extract text. Try a .txt file.';document.getElementById('ai-gen-btn').disabled=false;return;}
     text=text.slice(0,8000);progFill.style.width='50%';status.textContent='🤖 AI is generating flashcards...';
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:`You are a flashcard generator for Filipino students. Based on the content below, generate exactly 10 multiple-choice flashcards.\n\nRULES:\n1. Every question MUST start with "WHAT IS/ARE" — fill-in-the-blank style\n2. Each card: question, correct answer (1-5 words), 3 wrong choices\n3. Focus on key terms, definitions, concepts\n4. Return ONLY valid JSON array, no markdown\n\nFORMAT:\n[{"q":"WHAT IS ___ that stores data in tree structure?","a":"Hierarchical model","choices":["Hierarchical model","Network model","Relational model","Object model"]},...]\n\nCONTENT:\n${text}\n\nReturn ONLY the JSON array.`}]})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:`You are a flashcard generator for Filipino students. Based on the content below, generate exactly 10 multiple-choice flashcards.\n\nRULES:\n1. Every question MUST start with "WHAT IS/ARE" — fill-in-the-blank style\n2. Each card: question, correct answer (1-5 words), 3 wrong choices\n3. Focus on key terms, definitions, concepts\n4. Return ONLY valid JSON array, no markdown\n\nFORMAT:\n[{"q":"WHAT IS ___ that stores data in tree structure?","a":"Hierarchical model","choices":["Hierarchical model","Network model","Relational model","Object model"]},...]\n\nCONTENT:\n${text}\n\nReturn ONLY the JSON array.`}]})});
     progFill.style.width='80%';const data=await resp.json();const raw=data.content?.[0]?.text||'[]';
     let cards=[];try{const clean=raw.replace(/```json|```/g,'').trim();cards=JSON.parse(clean);}catch(e){status.textContent='⚠️ Error parsing response. Try again.';progFill.style.width='0%';document.getElementById('ai-gen-btn').disabled=false;return;}
     cards.forEach(c=>{if(c.q&&c.a&&c.choices)dk.cards.push({id:uid(),q:c.q,a:c.a,choices:c.choices});});
     progFill.style.width='100%';status.textContent=`✅ Generated ${cards.length} flashcards for "${dk.name}"!`;
     save();if(currentDeckId===deckId)renderCardList();renderDecks();
-  }catch(e){status.textContent='⚠️ Error: '+e.message;}
+  }catch(e){
+    if(e.message&&(e.message.includes('fetch')||e.message.includes('Failed'))){
+      status.textContent='⚠️ Network error. Please check your internet connection and try again.';
+    } else {
+      status.textContent='⚠️ Error: '+e.message;
+    }
+  }
   document.getElementById('ai-gen-btn').disabled=false;
 };
-async function extractTextFromFile(file){return new Promise(resolve=>{const reader=new FileReader();reader.onload=e=>{try{const buf=e.target.result;const bytes=new Uint8Array(buf);let text='';for(let i=0;i<bytes.length;i++){const b=bytes[i];if(b>=32&&b<127)text+=String.fromCharCode(b);else if(b===10||b===13)text+='\n';}text=text.replace(/[^\x20-\x7E\n]/g,' ').replace(/ {3,}/g,' ').replace(/\n{3,}/g,'\n\n');resolve(text);}catch(e){resolve('');}};reader.readAsArrayBuffer(file);});}
+async function extractTextFromFile(file){
+  if(file.name.endsWith('.txt')||file.type==='text/plain')return file.text();
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try{
+        const buf=e.target.result;const bytes=new Uint8Array(buf);
+        let text='';let run='';
+        for(let i=0;i<bytes.length;i++){
+          const b=bytes[i];
+          if(b>=32&&b<127){run+=String.fromCharCode(b);}
+          else if(b===10||b===13){if(run.length>3){text+=run+'\n';}run='';}
+          else{if(run.length>3){text+=run+' ';}run='';}
+        }
+        if(run.length>3)text+=run;
+        text=text.replace(/[^\x20-\x7E\n]/g,' ').replace(/ {4,}/g,' ').replace(/\n{3,}/g,'\n\n').trim();
+        resolve(text);
+      }catch(e){resolve('');}
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}
 
 // REVIEW MODE
 document.getElementById('rc-start-review').onclick=()=>{const dk=D.decks.find(d=>d.id===currentDeckId);if(!dk||!dk.cards||!dk.cards.length)return alert('No cards in this deck yet!');startReview(dk);};
@@ -1204,8 +1232,8 @@ function showReviewCard(){
   document.querySelectorAll('.rm-choice').forEach(btn=>{
     btn.onclick=()=>{if(reviewAnswered)return;reviewAnswered=true;reviewTotal++;
       const correct=btn.dataset.ans===card.a;
-      if(correct){reviewCorrect++;btn.classList.add('correct');document.getElementById('rm-card').classList.add('correct-flash');spawnParticles();document.getElementById('rm-feedback').innerHTML=`<div class="rm-feedback-msg" style="color:var(--g)">${CORRECT_MSGS[Math.floor(Math.random()*CORRECT_MSGS.length)]}</div><div class="rm-feedback-sub">+1 ⭐</div>`;}
-      else{btn.classList.add('wrong');document.getElementById('rm-card').classList.add('shake');document.querySelectorAll('.rm-choice').forEach(b=>{if(b.dataset.ans===card.a)b.classList.add('correct');});document.getElementById('rm-feedback').innerHTML=`<div class="rm-feedback-msg" style="color:var(--red)">${WRONG_MSGS[Math.floor(Math.random()*WRONG_MSGS.length)]}</div><div class="rm-feedback-sub">Answer: <b style="color:var(--g)">${esc(card.a)}</b></div>`;}
+      if(correct){reviewCorrect++;btn.classList.add('correct');document.getElementById('rm-card').classList.add('correct-flash');spawnParticles();playCorrectSound();document.getElementById('rm-feedback').innerHTML=`<div class="rm-feedback-msg" style="color:#7deb8f">${CORRECT_MSGS[Math.floor(Math.random()*CORRECT_MSGS.length)]}</div><div class="rm-feedback-sub">+1 ⭐</div>`;}
+      else{btn.classList.add('wrong');document.getElementById('rm-card').classList.add('shake');playWrongSound();document.querySelectorAll('.rm-choice').forEach(b=>{if(b.dataset.ans===card.a)b.classList.add('correct');});document.getElementById('rm-feedback').innerHTML=`<div class="rm-feedback-msg" style="color:#ef9a9a">${WRONG_MSGS[Math.floor(Math.random()*WRONG_MSGS.length)]}</div><div class="rm-feedback-sub">Answer: <b style="color:#7deb8f">${esc(card.a)}</b></div>`;}
       document.querySelectorAll('.rm-choice').forEach(b=>b.disabled=true);document.getElementById('rm-next').classList.add('show');
     };
   });
@@ -1226,6 +1254,37 @@ function showSessionEnd(isAllDone){
   document.getElementById('rm-prog-fill').style.width='100%';
 }
 function closeReview(){document.getElementById('review-mode').classList.remove('show');}
+// SOUND EFFECTS (Web Audio API — no external files needed)
+let _audioCtx=null;
+function getAudioCtx(){if(!_audioCtx)_audioCtx=new(window.AudioContext||window.webkitAudioContext)();return _audioCtx;}
+function playCorrectSound(){
+  try{
+    const ctx=getAudioCtx();const now=ctx.currentTime;
+    // Cheerful two-tone chime: C5 → E5
+    [[523.25,0,0.12],[659.25,0.1,0.18],[783.99,0.22,0.22]].forEach(([freq,start,dur])=>{
+      const o=ctx.createOscillator();const g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=freq;
+      g.gain.setValueAtTime(0,now+start);g.gain.linearRampToValueAtTime(0.22,now+start+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,now+start+dur);
+      o.start(now+start);o.stop(now+start+dur+0.05);
+    });
+  }catch(e){}
+}
+function playWrongSound(){
+  try{
+    const ctx=getAudioCtx();const now=ctx.currentTime;
+    // Low buzzer: descending tones
+    [[220,0,0.15],[180,0.12,0.2]].forEach(([freq,start,dur])=>{
+      const o=ctx.createOscillator();const g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sawtooth';o.frequency.value=freq;
+      g.gain.setValueAtTime(0,now+start);g.gain.linearRampToValueAtTime(0.18,now+start+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,now+start+dur);
+      o.start(now+start);o.stop(now+start+dur+0.05);
+    });
+  }catch(e){}
+}
 function spawnParticles(){const emojis=['⭐','✨','🌟','💫','🎉','🔥','💪'];for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';p.textContent=emojis[Math.floor(Math.random()*emojis.length)];p.style.cssText=`left:${20+Math.random()*60}%;top:${30+Math.random()*40}%;animation-delay:${Math.random()*.3}s`;document.body.appendChild(p);setTimeout(()=>p.remove(),1200);}}
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 
