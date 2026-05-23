@@ -1316,10 +1316,16 @@ Return ONLY the JSON array:`
       ? data.choices[0].message.content : '';
     let cards = [];
     try {
-      const match = raw.match(/\[[\s\S]*\]/);
-      if(match) cards = JSON.parse(match[0]);
+      let cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const match = cleaned.match(/\[[\s\S]*\]/);
+      if(match) {
+        cards = JSON.parse(match[0]);
+      } else {
+        cards = JSON.parse(cleaned);
+      }
     } catch(e) {
-      showStatus('⚠️ Could not parse AI response. Try again.', '#ef9a9a');
+      showStatus('⚠️ Could not parse AI response. Try again or use shorter notes.', '#ef9a9a');
+      console.error('Raw AI response:', raw);
       progFill.style.width = '0%';
       btn.disabled = false;
       return;
