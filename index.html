@@ -509,9 +509,9 @@ textarea{resize:vertical;min-height:70px}
         <div style="font-size:13px;font-weight:700;color:#90caf9;margin-bottom:2px;display:flex;align-items:center;gap:6px"><i class="ti ti-sparkles" style="font-size:15px"></i>AI Reviewer Generator</div>
         <div style="font-size:11px;color:var(--t3);margin-bottom:8px">Paste your notes below — AI generates flashcards automatically</div>
         <div id="ai-key-row" style="margin-bottom:10px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <input id="ai-api-key" type="password" class="inp-sm" style="flex:1;min-width:180px;font-size:11px;padding:7px 10px;border-color:#2a5a7a" placeholder="🔑 Anthropic API key (sk-ant-...)">
+          <input id="ai-api-key" type="password" class="inp-sm" style="flex:1;min-width:180px;font-size:11px;padding:7px 10px;border-color:#2a5a7a" placeholder="🔑 Google Gemini API key (AIza...)">
           <button onclick="aiSaveKey()" style="background:#1a4a2a;border:1px solid #3a8a4a;border-radius:var(--rs);padding:7px 12px;color:#7deb8f;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap">Save Key</button>
-          <a href="https://console.anthropic.com/keys" target="_blank" style="font-size:10px;color:#64b5f6;text-decoration:none;white-space:nowrap">Get free key ↗</a>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:10px;color:#64b5f6;text-decoration:none;white-space:nowrap">Get free key ↗</a>
         </div>
         <div id="ai-key-saved" style="font-size:10px;color:#7deb8f;margin-bottom:8px;display:none">✅ API key saved!</div>
         <textarea id="ai-paste-text" style="width:100%;min-height:100px;background:#0f2030;border:1px solid #2a5a7a;border-radius:var(--rs);padding:10px;color:#cce8cc;font-family:inherit;font-size:12px;resize:vertical;outline:none;line-height:1.6;margin-bottom:4px" placeholder="I-paste mo dito ang iyong notes, lecture content, o definitions..."></textarea>
@@ -1266,29 +1266,24 @@ document.getElementById('ai-gen-btn').onclick = async () => {
 
   const apiKey = aiGetKey();
   if(!apiKey){
-    showStatus('⚠️ Please enter your Anthropic API key above. Get a free one at console.anthropic.com', '#ef9a9a');
+    showStatus('⚠️ Please enter your Google Gemini API key above. Get a free one at aistudio.google.com', '#ef9a9a');
     btn.disabled = false; progFill.style.width = '0%'; return;
   }
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
-        messages: [{
-          role: 'user',
-          content: `Generate exactly 10 multiple-choice flashcards from this study content. Return ONLY a valid JSON array, no markdown, no extra text.
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Generate exactly 10 multiple-choice flashcards from this study content. Return ONLY a valid JSON array, no markdown, no extra text.
 
 Each item must have:
 - "q": the question
-- "a": the correct answer (short, 1-6 words)  
+- "a": the correct answer (short, 1-6 words)
 - "choices": array of exactly 4 items — the correct answer MUST be included among them
 
 Example format:
@@ -1298,9 +1293,12 @@ Study content:
 ${text.slice(0, 8000)}
 
 Return ONLY the JSON array:`
-        }]
-      })
-    });
+            }]
+          }],
+          generationConfig: { maxOutputTokens: 2500, temperature: 0.4 }
+        })
+      }
+    );
 
     progFill.style.width = '80%';
     const data = await resp.json();
@@ -1312,7 +1310,8 @@ Return ONLY the JSON array:`
       return;
     }
 
-    const raw = (data.content && data.content[0]) ? data.content[0].text : '';
+    const raw = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0])
+      ? data.candidates[0].content.parts[0].text : '';
     let cards = [];
     try {
       const match = raw.match(/\[[\s\S]*\]/);
