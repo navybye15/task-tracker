@@ -266,6 +266,17 @@ textarea{resize:vertical;min-height:70px}
 .fci-choice.correct{background:#0f2010;border-color:var(--g2);color:var(--g)}
 .fci-del{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:12px;display:flex;align-items:center;padding:3px}
 .fci-del:hover{color:var(--red)}
+.fci-edit{position:absolute;top:8px;right:30px;background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:12px;display:flex;align-items:center;padding:3px}
+.fci-edit:hover{color:var(--blu)}
+.fci-edit-form{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr);display:flex;flex-direction:column;gap:6px}
+.fci-edit-form.open{display:flex}
+.fci-edit-inp{background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--rs);padding:6px 9px;color:var(--t);font-family:inherit;font-size:12px;outline:none;width:100%}
+.fci-edit-inp:focus{border-color:var(--blu)}
+.fci-edit-btns{display:flex;gap:6px;margin-top:2px}
+.fci-save-btn{background:#1a3a5a;border:1px solid #64b5f6;border-radius:var(--rs);padding:5px 12px;color:#90caf9;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer}
+.fci-save-btn:hover{background:#1a4a7a}
+.fci-cancel-btn{background:none;border:1px solid var(--bdr);border-radius:var(--rs);padding:5px 12px;color:var(--t3);font-family:inherit;font-size:11px;cursor:pointer}
+.fci-cancel-btn:hover{border-color:var(--t2);color:var(--t2)}
 
 /* REVIEW MODE */
 #review-mode{display:none;position:fixed;inset:0;background:#111c11;z-index:500;flex-direction:column;align-items:center;justify-content:center;padding:20px}
@@ -1162,8 +1173,75 @@ document.getElementById('rc-save-card').onclick=()=>{
 function renderCardList(){
   const dk=D.decks.find(d=>d.id===currentDeckId);if(!dk)return;const list=document.getElementById('card-list');
   if(!dk.cards||!dk.cards.length){list.innerHTML='<div class="empty">No cards yet — add manually or use AI generator</div>';return;}
-  list.innerHTML=dk.cards.map((c,i)=>`<div class="flash-card-item"><button class="fci-del" data-del-card="${c.id}"><i class="ti ti-x"></i></button><div class="fci-q"><span style="font-size:10px;color:var(--t3);margin-right:5px">#${i+1}</span>${esc(c.q)}</div><div class="fci-a"><i class="ti ti-check" style="font-size:10px;margin-right:4px"></i>${esc(c.a)}</div><div class="fci-choices">${(c.choices||[]).map(ch=>`<span class="fci-choice${ch===c.a?' correct':''}">${esc(ch)}</span>`).join('')}</div></div>`).join('');
-  list.querySelectorAll('[data-del-card]').forEach(el=>{el.onclick=()=>{const dk2=D.decks.find(d=>d.id===currentDeckId);if(dk2)dk2.cards=dk2.cards.filter(c=>c.id!==el.dataset.delCard);save();renderCardList();};});
+  list.innerHTML=dk.cards.map((c,i)=>`
+    <div class="flash-card-item" data-card-id="${c.id}">
+      <button class="fci-edit" data-edit-card="${c.id}" title="Edit card"><i class="ti ti-pencil"></i></button>
+      <button class="fci-del" data-del-card="${c.id}" title="Delete card"><i class="ti ti-x"></i></button>
+      <div class="fci-q"><span style="font-size:10px;color:var(--t3);margin-right:5px">#${i+1}</span>${esc(c.q)}</div>
+      <div class="fci-a"><i class="ti ti-check" style="font-size:10px;margin-right:4px"></i>${esc(c.a)}</div>
+      <div class="fci-choices">${(c.choices||[]).map(ch=>`<span class="fci-choice${ch===c.a?' correct':''}">${esc(ch)}</span>`).join('')}</div>
+      <div class="fci-edit-form" id="edit-form-${c.id}">
+        <div style="font-size:10px;color:var(--blu);font-weight:600;margin-bottom:2px">✏️ Edit Card</div>
+        <input class="fci-edit-inp" id="eq-${c.id}" value="${esc(c.q)}" placeholder="Question">
+        <input class="fci-edit-inp" id="ea-${c.id}" value="${esc(c.a)}" placeholder="Correct answer">
+        <input class="fci-edit-inp" id="ec2-${c.id}" value="${esc((c.choices||[]).filter(x=>x!==c.a)[0]||'')}" placeholder="Wrong choice 2">
+        <input class="fci-edit-inp" id="ec3-${c.id}" value="${esc((c.choices||[]).filter(x=>x!==c.a)[1]||'')}" placeholder="Wrong choice 3">
+        <input class="fci-edit-inp" id="ec4-${c.id}" value="${esc((c.choices||[]).filter(x=>x!==c.a)[2]||'')}" placeholder="Wrong choice 4 (optional)">
+        <div class="fci-edit-btns">
+          <button class="fci-save-btn" data-save-card="${c.id}"><i class="ti ti-check" style="font-size:11px"></i> Save</button>
+          <button class="fci-cancel-btn" data-cancel-edit="${c.id}">Cancel</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Delete buttons
+  list.querySelectorAll('[data-del-card]').forEach(el=>{
+    el.onclick=()=>{
+      const dk2=D.decks.find(d=>d.id===currentDeckId);
+      if(dk2)dk2.cards=dk2.cards.filter(c=>c.id!==el.dataset.delCard);
+      save();renderCardList();
+    };
+  });
+
+  // Edit toggle buttons
+  list.querySelectorAll('[data-edit-card]').forEach(el=>{
+    el.onclick=()=>{
+      const id=el.dataset.editCard;
+      const form=document.getElementById('edit-form-'+id);
+      // Close all other open forms first
+      list.querySelectorAll('.fci-edit-form.open').forEach(f=>{if(f.id!=='edit-form-'+id)f.classList.remove('open');});
+      form.classList.toggle('open');
+    };
+  });
+
+  // Cancel edit buttons
+  list.querySelectorAll('[data-cancel-edit]').forEach(el=>{
+    el.onclick=()=>{
+      document.getElementById('edit-form-'+el.dataset.cancelEdit).classList.remove('open');
+    };
+  });
+
+  // Save edit buttons
+  list.querySelectorAll('[data-save-card]').forEach(el=>{
+    el.onclick=()=>{
+      const id=el.dataset.saveCard;
+      const dk2=D.decks.find(d=>d.id===currentDeckId);if(!dk2)return;
+      const card=dk2.cards.find(c=>c.id===id);if(!card)return;
+      const newQ=document.getElementById('eq-'+id).value.trim();
+      const newA=document.getElementById('ea-'+id).value.trim();
+      const c2=document.getElementById('ec2-'+id).value.trim();
+      const c3=document.getElementById('ec3-'+id).value.trim();
+      const c4=document.getElementById('ec4-'+id).value.trim();
+      if(!newQ||!newA){alert('Question at correct answer ay required!');return;}
+      if(!c2||!c3){alert('Kailangan ng kahit 2 wrong choices!');return;}
+      card.q=newQ;
+      card.a=newA;
+      const choices=[newA,c2,c3];
+      if(c4)choices.push(c4);
+      card.choices=choices;
+      save();renderCardList();
+    };
+  });
 }
 document.getElementById('rc-sched-deck-btn').onclick=()=>openSchedModal(currentDeckId);
 function openSchedModal(deckId){schedDeckId=deckId;const dk=D.decks.find(d=>d.id===deckId);if(!dk)return;document.getElementById('sched-deck-name').textContent=dk.name;const sel=document.getElementById('sched-proj');sel.innerHTML='<option value="">— Add to project (optional) —</option>'+D.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');document.getElementById('sched-date').value=phtToday();document.getElementById('sched-modal').classList.add('show');}
