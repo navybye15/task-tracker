@@ -1166,7 +1166,7 @@ function renderWeek(){
     }).join(''):`<div class="day-empty">No tasks</div>`;
     const done2=tasks.filter(t=>t.done&&!t.isPreview).length;
     const canAdd=ds>=td;
-    block.innerHTML=`<div class="day-header" data-dh="${ds}"><div><div class="day-name">${dayName} <span class="day-date-lbl">(${dateStr})</span></div></div><div style="display:flex;align-items:center;gap:8px">${isToday?`<span class="day-tag-today">TODAY</span>`:''}<span style="font-size:11px;color:var(--t3)">${done2}/${tasks.length}</span><i class="ti ti-chevron-${block.classList.contains('open')?'up':'down'}" style="font-size:13px;color:var(--t3)"></i></div></div><div class="day-body">${tRows}${canAdd?`<div class="day-quick-add"><input class="day-quick-inp" data-qadate="${ds}" placeholder="Quick add task..." maxlength="100"><button class="day-quick-btn" data-qadd="${ds}"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div>`:''}</div>`;
+    block.innerHTML=`<div class="day-header" data-dh="${ds}"><div><div class="day-name">${dayName} <span class="day-date-lbl">(${dateStr})</span></div></div><div style="display:flex;align-items:center;gap:8px">${isToday?`<span class="day-tag-today">TODAY</span>`:''}<span style="font-size:11px;color:var(--t3)">${done2}/${tasks.length}</span><i class="ti ti-chevron-${block.classList.contains('open')?'up':'down'}" style="font-size:13px;color:var(--t3)"></i></div></div><div class="day-body">${tRows}${canAdd?`<div class="day-quick-add" style="flex-wrap:wrap;gap:5px"><input class="day-quick-inp" data-qadate="${ds}" placeholder="Quick add task..." maxlength="100" style="flex:1;min-width:120px"><input class="day-quick-inp" type="time" data-qatime="${ds}" title="Deadline time (optional)" style="width:110px;flex:0 0 auto;font-size:11px;padding:5px 8px;color:var(--pur);border-color:#3a1a5a"><button class="day-quick-btn" data-qadd="${ds}"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div>`:''}</div>`;
     body.appendChild(block);
   });
   body.querySelectorAll('[data-dh]').forEach(hd=>{hd.onclick=()=>{const b=hd.closest('.day-block');b.classList.toggle('open');const ic=hd.querySelector('i.ti');if(ic){ic.className=`ti ti-chevron-${b.classList.contains('open')?'up':'down'}`;ic.style.cssText='font-size:13px;color:var(--t3)';}};});
@@ -1174,21 +1174,11 @@ function renderWeek(){
   body.querySelectorAll('[data-focus-task]').forEach(el=>{el.addEventListener('click',e=>{e.stopPropagation();setFocusTask(el.dataset.focusTask,el.dataset.focusProj);});});
   body.querySelectorAll('[data-notes-task]').forEach(el=>{el.addEventListener('click',e=>{e.stopPropagation();openNotes(el.dataset.notesTask,el.dataset.notesProj);});});
   body.querySelectorAll('[data-qadd]').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();quickAdd(btn.dataset.qadd);});});
-  body.querySelectorAll('[data-qadate]').forEach(inp=>{inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();quickAdd(inp.dataset.qadate);}});});
+  body.querySelectorAll('[data-qadate]').forEach(inp=>{inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();quickAdd(inp.dataset.qadate);}});});body.querySelectorAll('[data-qatime]').forEach(inp=>{inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.stopPropagation();quickAdd(inp.dataset.qatime);}});});
   renderStats();
 }
 
-function quickAdd(ds){
-  const inp=document.querySelector(`[data-qadate="${ds}"]`);if(!inp)return;
-  const v=inp.value.trim();if(!v)return;
-  if(!D.projects.length)D.projects.push({id:uid(),name:'My Tasks',tasks:[]});
-  const proj=D.projects[0];const td2=phtToday();
-  const nt={id:uid(),name:v,done:false,priority:'none',deadline:ds,deadlineTime:'',note:'',addedDate:td2};
-  proj.tasks.push(nt);
-  if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};
-  D.dailyLog[td2].added.push(nt.id);
-  inp.value='';save();renderWeek();
-}
+function quickAdd(ds){const inp=document.querySelector(`[data-qadate="${ds}"]`);if(!inp)return;const v=inp.value.trim();if(!v)return;const timeInp=document.querySelector(`[data-qatime="${ds}"]`);const qt=timeInp?timeInp.value:'';if(!D.projects.length)D.projects.push({id:uid(),name:'My Tasks',tasks:[]});const proj=D.projects[0];const td2=phtToday();const nt={id:uid(),name:v,done:false,priority:'none',deadline:ds,deadlineTime:qt,note:'',addedDate:td2};proj.tasks.push(nt);if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};D.dailyLog[td2].added.push(nt.id);inp.value='';if(timeInp)timeInp.value='';save();renderWeek();}
 
 // ===== STATS =====
 function renderStats(){
