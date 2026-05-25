@@ -316,6 +316,155 @@ textarea{resize:vertical;min-height:70px}
 .particle{position:fixed;pointer-events:none;z-index:9999;font-size:20px;animation:particleFly 1s ease-out forwards}
 @keyframes particleFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(.5)}}
 
+/* ===== ANIMATION SYSTEM ===== */
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 0 rgba(93,219,111,0)}50%{box-shadow:0 0 18px rgba(93,219,111,.22)}}
+@keyframes checkBounce{0%{transform:scale(0)}60%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes taskDone{0%{opacity:1;transform:translateX(0)}30%{transform:translateX(6px)}60%{transform:translateX(-3px)}100%{opacity:.38;transform:translateX(0)}}
+@keyframes streakPop{0%{transform:scale(1)}40%{transform:scale(1.35) rotate(-8deg)}70%{transform:scale(.95) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes borderGlow{0%,100%{border-color:var(--bdr)}50%{border-color:var(--g2)}}
+@keyframes toastIn{from{opacity:0;transform:scale(.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes modalIn{from{opacity:0;transform:scale(.93) translateY(-16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes tabSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rowFadeIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes addTaskPop{0%{transform:scale(1)}40%{transform:scale(.94)}100%{transform:scale(1)}}
+@keyframes progressFill{from{width:0}to{width:var(--pct)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-36px) scale(.7)}}
+@keyframes inputFocus{0%{box-shadow:0 0 0 0 rgba(93,219,111,0)}100%{box-shadow:0 0 0 3px rgba(93,219,111,.12)}}
+@keyframes dayBlockIn{from{opacity:0;transform:translateY(10px) scaleY(.96)}to{opacity:1;transform:translateY(0) scaleY(1)}}
+@keyframes pbarFill{from{width:0%}to{width:inherit}}
+
+/* Apply animations to elements */
+.view.active{animation:tabSlide .22s ease both}
+.day-block{animation:dayBlockIn .2s ease both}
+.task{animation:rowFadeIn .18s ease both}
+.at-item{animation:rowFadeIn .18s ease both}
+.proj{animation:rowFadeIn .2s ease both}
+.deck-card{animation:scaleIn .2s ease both}
+.flash-card-item{animation:rowFadeIn .18s ease both}
+.recur-item{animation:rowFadeIn .18s ease both}
+.rec-manage-item{animation:rowFadeIn .18s ease both}
+
+/* Stagger children */
+.task:nth-child(1){animation-delay:.02s}.task:nth-child(2){animation-delay:.05s}.task:nth-child(3){animation-delay:.08s}.task:nth-child(4){animation-delay:.11s}.task:nth-child(5){animation-delay:.14s}.task:nth-child(6){animation-delay:.17s}
+.at-item:nth-child(1){animation-delay:.03s}.at-item:nth-child(2){animation-delay:.07s}.at-item:nth-child(3){animation-delay:.11s}.at-item:nth-child(4){animation-delay:.15s}.at-item:nth-child(5){animation-delay:.19s}
+.deck-card:nth-child(1){animation-delay:.03s}.deck-card:nth-child(2){animation-delay:.08s}.deck-card:nth-child(3){animation-delay:.13s}.deck-card:nth-child(4){animation-delay:.18s}
+.day-block:nth-child(1){animation-delay:.02s}.day-block:nth-child(2){animation-delay:.06s}.day-block:nth-child(3){animation-delay:.1s}.day-block:nth-child(4){animation-delay:.14s}.day-block:nth-child(5){animation-delay:.18s}.day-block:nth-child(6){animation-delay:.22s}.day-block:nth-child(7){animation-delay:.26s}
+
+/* Toast & Modal entrances */
+.overlay.show .toast{animation:toastIn .28s cubic-bezier(.34,1.56,.64,1) both}
+.modal-bg.show .modal{animation:modalIn .25s cubic-bezier(.34,1.56,.64,1) both}
+
+/* Button press feel */
+.btn:active{transform:scale(.95)!important;transition:transform .08s}
+.btn-sm:active{transform:scale(.94)!important}
+.btn-outline:active{transform:scale(.95)!important}
+.tab:active{transform:scale(.93)!important}
+.chk:active,.day-task-chk:active{transform:scale(.85)!important}
+
+/* Checkbox done animation */
+.task.done .chk{animation:checkBounce .25s ease both}
+.day-task.done .day-task-chk{animation:checkBounce .25s ease both}
+
+/* Task done slide */
+.task.anim-done{animation:taskDone .4s ease both}
+
+/* Input focus glow */
+input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;border-color:var(--g2)}
+
+/* Streak flame pop */
+.streak-flame.pop{animation:streakPop .45s cubic-bezier(.34,1.56,.64,1) both}
+
+/* Streak panel slide */
+.streak-panel.show{animation:slideDown .22s cubic-bezier(.34,1.56,.64,1) both}
+.user-menu.show{animation:slideDown .18s ease both}
+
+/* Progress bar animate */
+.pbar-f{transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* Add task box appear */
+.add-task-box{animation:slideDown .2s ease both}
+
+/* Day body appear */
+.day-body{animation:slideDown .2s ease both}
+
+/* Save indicator */
+.save-ind.show{animation:slideUp .2s ease both}
+
+/* Recurring badge pulse when first loaded */
+.recur-tag{transition:all .2s}
+.time-tag{transition:all .2s}
+.pri{transition:all .2s}
+
+/* Card hover lift */
+.deck-card{transition:all .22s cubic-bezier(.4,0,.2,1)!important}
+.deck-card:hover{transform:translateY(-4px) scale(1.02)!important;box-shadow:0 8px 24px rgba(93,219,111,.12)!important}
+
+/* PHT bar subtle glow on load */
+.pht-bar{animation:slideDown .3s ease both}
+
+/* Quote card entrance */
+.quote-card{animation:scaleIn .3s cubic-bezier(.34,1.56,.64,1) both}
+
+/* Stats counter pop */
+.stat{animation:scaleIn .22s ease both}
+.stat:nth-child(1){animation-delay:.04s}.stat:nth-child(2){animation-delay:.08s}.stat:nth-child(3){animation-delay:.12s}.stat:nth-child(4){animation-delay:.16s}
+
+/* Urgent section titles */
+.urgent-section-title{animation:slideInLeft .2s ease both}
+
+/* Tabs bar */
+.tab{transition:all .15s cubic-bezier(.4,0,.2,1)!important}
+.tab.active{animation:tabSlide .18s ease both}
+
+/* Insight cards */
+.insight-card{animation:rowFadeIn .22s ease both}
+.insight-card:nth-child(1){animation-delay:.04s}.insight-card:nth-child(2){animation-delay:.1s}.insight-card:nth-child(3){animation-delay:.16s}.insight-card:nth-child(4){animation-delay:.22s}
+
+/* Floating +1 on task complete */
+.float-label{position:fixed;pointer-events:none;z-index:9999;font-size:13px;font-weight:700;color:var(--g);text-shadow:0 0 8px rgba(93,219,111,.6);animation:floatUp .8s ease-out forwards}
+
+/* Ripple on buttons */
+.btn,.btn-sm,.btn-outline{position:relative;overflow:hidden}
+.btn::after,.btn-sm::after,.btn-outline::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.08);opacity:0;border-radius:inherit;transition:opacity .2s}
+.btn:active::after,.btn-sm:active::after,.btn-outline:active::after{opacity:1}
+
+/* Topbar entrance */
+.topbar{animation:slideDown .25s ease both}
+.tabs{animation:slideDown .3s ease both}
+
+/* Focus box */
+.focus-box{animation:scaleIn .25s cubic-bezier(.34,1.56,.64,1) both}
+.timer-disp{transition:color .3s}
+.btn-timer.running .timer-disp{color:var(--g)}
+
+/* Heatmap cells */
+.hm-cell{transition:transform .15s,box-shadow .15s}
+.hm-cell:hover{transform:scale(1.2);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+
+/* Cal day hover */
+.cal-day{transition:all .15s}
+.cal-day:hover{transform:scale(1.06)}
+.cal-day.selected{animation:popIn .2s cubic-bezier(.34,1.56,.64,1) both}
+
+/* Proj header hover */
+.proj-hd{transition:background .15s}
+.proj-hd:hover{background:var(--bg3)}
+
+/* Day header hover */
+.day-header{transition:background .15s}
+
+/* Notes overlay */
+.notes-overlay.show .notes-panel{animation:slideUp .25s cubic-bezier(.34,1.56,.64,1) both}
+
+/* Rec box */
+.recur-box{animation:scaleIn .22s ease both}
+
 /* TOAST */
 .overlay{display:none;position:fixed;inset:0;background:rgba(4,8,4,.92);z-index:999;align-items:center;justify-content:center;padding:20px}
 .overlay.show{display:flex}
@@ -1063,7 +1212,7 @@ function renderProjects(){
     const el=document.createElement('div');el.className='proj'+(open.has(proj.id)?' open':'');el.dataset.id=proj.id;
     const tHTML=sorted.length?sorted.map(t=>{const du=daysUntil(t.deadline);return`<div class="task${t.done?' done':''}"><div class="chk" data-chk="${t.id}" data-pid="${proj.id}"><i class="ti ti-check"></i></div><div class="task-info"><span class="task-name">${esc(t.name)}${t.detailedNote?'<span class="has-note-dot"></span>':''}</span><div class="task-meta">${t.category?catBadgeHTML(t.category):''} ${t.priority&&t.priority!=='none'?`<span class="pri ${PM[t.priority]}">${t.priority}</span>`:''} ${t.deadline?`<span class="${dlCls(du)}">${dlTxt(du,t.deadline,t.deadlineTime)}</span>`:''} ${t.deadlineTime?`<span class="time-tag"><i class="ti ti-clock" style="font-size:9px"></i>${t.deadlineTime}</span>`:''} ${t.isDeckReview?`<span class="deck-tag"><i class="ti ti-cards" style="font-size:9px"></i>review</span>`:''}</div></div><div class="task-actions"><button class="btn-focus" data-notes-task="${t.id}" data-notes-proj="${proj.id}" title="Notes" style="${t.detailedNote?'color:#64b5f6':''}"><i class="ti ti-notes" style="font-size:11px"></i></button><button class="btn-focus" data-focus-task="${t.id}" data-focus-proj="${proj.id}"><i class="ti ti-player-play" style="font-size:11px"></i></button><button class="btn-del" data-del-task="${t.id}" data-pid="${proj.id}"><i class="ti ti-x" style="font-size:12px"></i></button></div></div>`;}).join(''):`<div class="empty">No tasks yet</div>`;
     const catOptions=getCats().map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-    el.innerHTML=`<div class="proj-hd" data-pid="${proj.id}"><div class="proj-chev"><i class="ti ti-chevron-down"></i></div><div class="proj-name">${esc(proj.name)}</div><div class="badge${allDone?' done':''}">${done}/${tasks.length}</div><button class="btn-icon" data-del-proj="${proj.id}"><i class="ti ti-trash" style="font-size:13px"></i></button></div><div class="proj-bd"><div class="pbar"><div class="pbar-f" style="width:${pct}%"></div></div><div class="task-list">${tHTML}</div><div class="add-task-box"><div class="add-t-row"><input class="inp-sm" style="flex:1;width:auto" placeholder="Task name..." data-ti="${proj.id}" maxlength="100"><button class="btn-sm" data-at="${proj.id}"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div><div class="add-meta"><select data-ps="${proj.id}"><option value="none">No priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select><input class="inp-sm" type="date" data-di="${proj.id}" style="width:auto;flex:1" placeholder="Deadline date"></div><div class="add-meta2"><input class="inp-sm" type="time" data-dti="${proj.id}" style="width:auto;flex:1" placeholder="Time (optional)"><select class="inp-sm cat-select" data-ci="${proj.id}" style="flex:1"><option value="">No category</option>${catOptions}</select></div><input class="inp-sm" data-ni="${proj.id}" placeholder="Note (optional)" maxlength="100" style="width:100%;margin-top:4px"></div></div>`;
+    el.innerHTML=`<div class="proj-hd" data-pid="${proj.id}"><div class="proj-chev"><i class="ti ti-chevron-down"></i></div><div class="proj-name">${esc(proj.name)}</div><div class="badge${allDone?' done':''}">${done}/${tasks.length}</div><button class="btn-icon" data-del-proj="${proj.id}"><i class="ti ti-trash" style="font-size:13px"></i></button></div><div class="proj-bd"><div class="pbar"><div class="pbar-f" style="width:${pct}%"></div></div><div class="task-list">${tHTML}</div><div class="add-task-box"><div class="add-t-row"><input class="inp-sm" style="flex:1;width:auto" placeholder="Task name..." data-ti="${proj.id}" maxlength="100"><button class="btn-sm" data-at="${proj.id}"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div><div class="add-meta"><select data-ps="${proj.id}"><option value="none">No priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div><div class="add-meta2" style="flex-wrap:wrap"><div style="flex:1;min-width:130px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Start Date</div><input class="inp-sm" type="date" data-si="${proj.id}" style="width:100%"></div><div style="flex:1;min-width:130px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Deadline Date</div><input class="inp-sm" type="date" data-di="${proj.id}" style="width:100%"></div></div><div class="add-meta2" style="flex-wrap:wrap"><div style="flex:1;min-width:130px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Deadline Time</div><input class="inp-sm" type="time" data-dti="${proj.id}" style="width:100%"></div><div style="flex:1;min-width:130px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Category</div><select class="inp-sm cat-select" data-ci="${proj.id}" style="width:100%"><option value="">No category</option>${catOptions}</select></div></div><input class="inp-sm" data-ni="${proj.id}" placeholder="Note (optional)" maxlength="100" style="width:100%;margin-top:4px"></div></div>`;
     pl.appendChild(el);
   });
 }
@@ -1079,11 +1228,11 @@ document.getElementById('pl').addEventListener('click',e=>{
   const at=e.target.closest('[data-at]');if(at){
     const pid=at.dataset.at;const card=at.closest('.proj');
     const inp=card.querySelector(`[data-ti="${pid}"]`);const ps=card.querySelector(`[data-ps="${pid}"]`);
-    const di=card.querySelector(`[data-di="${pid}"]`);const dti=card.querySelector(`[data-dti="${pid}"]`);const ni=card.querySelector(`[data-ni="${pid}"]`);
+    const si=card.querySelector(`[data-si="${pid}"]`);const di=card.querySelector(`[data-di="${pid}"]`);const dti=card.querySelector(`[data-dti="${pid}"]`);const ni=card.querySelector(`[data-ni="${pid}"]`);
     const v=inp.value.trim();if(!v)return;
     const ci=card.querySelector(`[data-ci="${pid}"]`);
     const p=D.projects.find(p=>p.id===pid);
-    if(p){const td2=phtToday();const nt={id:uid(),name:v,done:false,priority:ps.value,deadline:di.value||'',deadlineTime:dti?dti.value:'',note:ni?ni.value.trim():'',category:ci?ci.value||null:null,addedDate:td2};p.tasks.push(nt);if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};D.dailyLog[td2].added.push(nt.id);inp.value='';ps.value='none';di.value='';if(dti)dti.value='';if(ni)ni.value='';if(ci)ci.value='';}
+    if(p){const td2=phtToday();const nt={id:uid(),name:v,done:false,priority:ps.value,startDate:si?si.value||'':'',deadline:di.value||'',deadlineTime:dti?dti.value:'',note:ni?ni.value.trim():'',category:ci?ci.value||null:null,addedDate:td2};p.tasks.push(nt);if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};D.dailyLog[td2].added.push(nt.id);inp.value='';ps.value='none';if(si)si.value='';di.value='';if(dti)dti.value='';if(ni)ni.value='';if(ci)ci.value='';}
     save();renderProjects();renderStats();return;
   }
   const hd=e.target.closest('[data-pid]');if(hd&&!e.target.closest('button')&&!e.target.closest('input')&&!e.target.closest('select')){hd.closest('.proj').classList.toggle('open');}
@@ -1114,10 +1263,10 @@ function renderCalPanel(){
   const tasks=tasksForDate(calSel);const dsObj=new Date(calSel+'T00:00:00');
   const label=dsObj.toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
   const tRows=tasks.length?tasks.map(t=>{const du=daysUntil(t.deadline);if(t.isPreview)return`<div class="task" style="opacity:.55;border-style:dashed"><div class="chk" style="opacity:.4;cursor:default"><i class="ti ti-check"></i></div><div class="task-info"><span class="task-name" style="color:var(--t2)">${esc(t.name)}</span><div class="task-meta"><span class="recur-tag"><i class="ti ti-refresh" style="font-size:9px"></i>recurring</span></div></div></div>`;return`<div class="task${t.done?' done':''}"><div class="chk" data-chk="${t.id}" data-pid="${t.projId}"><i class="ti ti-check"></i></div><div class="task-info"><span class="task-name">${esc(t.name)}</span><div class="task-meta">${t.priority&&t.priority!=='none'?`<span class="pri ${PM[t.priority]}">${t.priority}</span>`:''} ${t.deadline?`<span class="${dlCls(du)}">${dlTxt(du,t.deadline,t.deadlineTime)}</span>`:''} ${t.deadlineTime?`<span class="time-tag"><i class="ti ti-clock" style="font-size:9px"></i>${t.deadlineTime}</span>`:''}</div></div></div>`;}).join(''):`<div class="empty">No tasks</div>`;
-  const addBox=calSel>=phtToday()?`<div style="background:var(--bg3);border:1px solid #161e16;border-radius:var(--rs);padding:9px;margin-top:8px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">+ Add task for this date</div><div style="display:flex;gap:6px;margin-bottom:6px"><input class="inp-sm" style="flex:1;width:auto" placeholder="Task name..." id="cai" maxlength="100"><button class="btn-sm" id="cab"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><select id="cap" style="flex:1;min-width:100px;font-size:12px;padding:6px 8px"><option value="">— Project —</option>${D.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select><select id="capr" style="flex:1;min-width:90px;font-size:12px;padding:6px 8px"><option value="none">No priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div><input type="time" id="catime" class="inp-sm" style="width:100%;font-size:12px;padding:6px 9px" placeholder="Time (optional)"></div>`:'';
+  const addBox=calSel>=phtToday()?`<div style="background:var(--bg3);border:1px solid #161e16;border-radius:var(--rs);padding:9px;margin-top:8px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">+ Add task for this date</div><div style="display:flex;gap:6px;margin-bottom:6px"><input class="inp-sm" style="flex:1;width:auto" placeholder="Task name..." id="cai" maxlength="100"><button class="btn-sm" id="cab"><i class="ti ti-plus" style="font-size:12px"></i>Add</button></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><select id="cap" style="flex:1;min-width:100px;font-size:12px;padding:6px 8px"><option value="">— Project —</option>${D.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select><select id="capr" style="flex:1;min-width:90px;font-size:12px;padding:6px 8px"><option value="none">No priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><div style="flex:1;min-width:120px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Start Date</div><input type="date" id="casdate" class="inp-sm" style="width:100%;font-size:12px;padding:6px 9px"></div><div style="flex:1;min-width:120px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Deadline Date</div><input type="date" id="caddate" class="inp-sm" style="width:100%;font-size:12px;padding:6px 9px" value="${calSel}"></div></div><div style="flex:1;min-width:120px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Deadline Time</div><input type="time" id="catime" class="inp-sm" style="width:100%;font-size:12px;padding:6px 9px"></div></div>`:'';
   panel.innerHTML=`<div class="cal-panel"><div class="cal-panel-title"><span>${label}</span><span style="font-size:11px;color:var(--t3)">${tasks.length} task${tasks.length!==1?'s':''}</span></div><div style="display:flex;flex-direction:column;gap:5px;margin-bottom:4px">${tRows}</div>${addBox}</div>`;
   const cab=document.getElementById('cab');
-  if(cab){const doAdd=()=>{const inp=document.getElementById('cai');const v=inp.value.trim();if(!v)return;let pid=document.getElementById('cap').value;let proj=D.projects.find(p=>p.id===pid);if(!proj){if(!D.projects.length)D.projects.push({id:uid(),name:'My Tasks',tasks:[]});proj=D.projects[0];pid=proj.id;}const pri=document.getElementById('capr').value;const time=document.getElementById('catime')?.value||'';const td2=phtToday();const nt={id:uid(),name:v,done:false,priority:pri,deadline:calSel,deadlineTime:time,note:'',addedDate:td2};proj.tasks.push(nt);if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};D.dailyLog[td2].added.push(nt.id);inp.value='';save();renderCalendar();renderStats();};cab.onclick=doAdd;document.getElementById('cai').addEventListener('keydown',e=>{if(e.key==='Enter')doAdd();});}
+  if(cab){const doAdd=()=>{const inp=document.getElementById('cai');const v=inp.value.trim();if(!v)return;let pid=document.getElementById('cap').value;let proj=D.projects.find(p=>p.id===pid);if(!proj){if(!D.projects.length)D.projects.push({id:uid(),name:'My Tasks',tasks:[]});proj=D.projects[0];pid=proj.id;}const pri=document.getElementById('capr').value;const time=document.getElementById('catime')?.value||'';const sdate=document.getElementById('casdate')?.value||'';const ddate=document.getElementById('caddate')?.value||calSel;const td2=phtToday();const nt={id:uid(),name:v,done:false,priority:pri,startDate:sdate,deadline:ddate,deadlineTime:time,note:'',addedDate:td2};proj.tasks.push(nt);if(!D.dailyLog[td2])D.dailyLog[td2]={added:[],done:[]};D.dailyLog[td2].added.push(nt.id);inp.value='';save();renderCalendar();renderStats();};cab.onclick=doAdd;document.getElementById('cai').addEventListener('keydown',e=>{if(e.key==='Enter')doAdd();});}
   panel.querySelectorAll('[data-chk]').forEach(el=>{el.onclick=()=>doCheck(el.dataset.pid,el.dataset.chk,()=>{renderCalendar();renderStats();});});
 }
 
