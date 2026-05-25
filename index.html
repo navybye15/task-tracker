@@ -559,8 +559,51 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
 .rec-manage-sched{font-size:10px;color:var(--t3);line-height:1.5}
 .rec-manage-btns{display:flex;gap:5px;flex-shrink:0}
 .rec-edit-form{display:none;background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--rs);padding:10px;margin-top:6px;flex-direction:column;gap:7px}
-.rec-edit-form.open{display:flex}
-</style>
+.tab.ai-tab{background:linear-gradient(135deg,#1a0d2e,#0d1a2e);border:1px solid #3a1a6a;color:#ce93d8}
+.tab.ai-tab.active{background:linear-gradient(135deg,#3a1a6a,#1a3a6a);color:#fff;border-color:#ce93d8}
+
+/* AI CHAT */
+.ai-chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 280px);min-height:340px;background:var(--bg2);border:1px solid #2a1a4a;border-radius:var(--r);overflow:hidden}
+.ai-chat-header{padding:10px 14px;background:linear-gradient(135deg,#1a0d2e,#0d1a2e);border-bottom:1px solid #2a1a4a;display:flex;align-items:center;gap:8px}
+.ai-chat-title{font-size:13px;font-weight:700;color:#ce93d8;display:flex;align-items:center;gap:6px}
+.ai-chat-sub{font-size:10px;color:#9a7aaa;margin-top:2px}
+.ai-chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--bdr2) transparent}
+.ai-msg{display:flex;flex-direction:column;gap:3px;max-width:88%}
+.ai-msg.user{align-self:flex-end;align-items:flex-end}
+.ai-msg.bot{align-self:flex-start;align-items:flex-start}
+.ai-msg-bubble{padding:9px 13px;border-radius:14px;font-size:12px;line-height:1.6;word-break:break-word}
+.ai-msg.user .ai-msg-bubble{background:linear-gradient(135deg,#2a1a5a,#1a2a5a);color:#ddd8ff;border:1px solid #4a2a8a;border-bottom-right-radius:4px}
+.ai-msg.bot .ai-msg-bubble{background:var(--bg3);color:var(--t);border:1px solid var(--bdr2);border-bottom-left-radius:4px}
+.ai-msg-time{font-size:9px;color:var(--t3);padding:0 4px}
+.ai-chat-input-row{display:flex;gap:6px;padding:10px;border-top:1px solid #2a1a4a;background:#0f0b1a}
+.ai-chat-input{flex:1;background:#1a1428;border:1px solid #3a2a6a;border-radius:22px;padding:10px 16px;color:#ddd8ff;font-family:inherit;font-size:13px;outline:none;resize:none;height:42px;max-height:110px;overflow-y:auto;transition:border-color .15s;line-height:1.4}
+.ai-chat-input:focus{border-color:#ce93d8}
+.ai-chat-input::placeholder{color:#6a5a8a}
+.ai-send-btn{background:linear-gradient(135deg,#3a1a6a,#1a3a6a);border:1px solid #ce93d8;border-radius:50%;width:42px;height:42px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.ai-send-btn:hover{background:linear-gradient(135deg,#5a2a9a,#2a5a9a)}
+.ai-send-btn:disabled{opacity:.4;cursor:default}
+.ai-task-preview{background:#0f1a0f;border:1px solid var(--g3);border-radius:var(--rs);padding:10px 12px;margin-top:6px;font-size:11px}
+.ai-task-preview-title{font-size:10px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.ai-task-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #162016}
+.ai-task-row:last-child{border-bottom:none}
+.ai-task-label{color:var(--t3);font-size:10px}
+.ai-task-val{color:var(--t);font-size:11px;font-weight:500;text-align:right;max-width:60%}
+.ai-confirm-btns{display:flex;gap:6px;margin-top:8px}
+.ai-confirm-btn{background:var(--g3);border:1px solid var(--g2);border-radius:var(--rs);padding:6px 14px;color:#d4f7d4;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:4px}
+.ai-confirm-btn:hover{background:var(--g2)}
+.ai-deny-btn{background:transparent;border:1px solid var(--bdr2);border-radius:var(--rs);padding:6px 14px;color:var(--t3);font-family:inherit;font-size:11px;cursor:pointer;flex:1}
+.ai-deny-btn:hover{border-color:var(--red);color:var(--red)}
+.ai-typing{display:flex;align-items:center;gap:4px;padding:9px 13px;background:var(--bg3);border:1px solid var(--bdr2);border-radius:14px;border-bottom-left-radius:4px;width:56px}
+.ai-typing span{width:6px;height:6px;border-radius:50%;background:#ce93d8;display:inline-block;animation:aiDot 1.2s ease-in-out infinite}
+.ai-typing span:nth-child(2){animation-delay:.2s}
+.ai-typing span:nth-child(3){animation-delay:.4s}
+@keyframes aiDot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.ai-api-row{display:flex;gap:6px;align-items:center;padding:8px 14px;background:#0d0a1a;border-bottom:1px solid #2a1a4a;flex-wrap:wrap}
+.ai-key-inp{flex:1;min-width:160px;background:#1a1428;border:1px solid #3a2a6a;border-radius:var(--rs);padding:7px 10px;color:#ddd8ff;font-family:inherit;font-size:11px;outline:none}
+.ai-key-inp:focus{border-color:#ce93d8}
+.ai-key-save{background:#2a1a5a;border:1px solid #6a4aaa;border-radius:var(--rs);padding:7px 12px;color:#ce93d8;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ai-key-save:hover{background:#3a2a6a}
+.ai-hint{font-size:10px;color:#7a6aaa;padding:2px 0}
 </head>
 <body>
 
@@ -615,6 +658,7 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
     <button class="tab" data-tab="urgent"><i class="ti ti-alert-triangle"></i><span>Urgent</span></button>
     <button class="tab" data-tab="insights"><i class="ti ti-chart-bar"></i><span>Insights</span></button>
     <button class="tab review-tab" data-tab="reviewcall"><i class="ti ti-cards"></i><span>ReviewCall</span></button>
+    <button class="tab ai-tab" data-tab="aichat"><i class="ti ti-message-bolt"></i><span>AI Add</span></button>
   </div>
 
   <div class="stats">
@@ -818,6 +862,36 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
         </div>
       </div>
       <div class="card-list" id="card-list"></div>
+    </div>
+  </div>
+
+  <!-- AI CHAT -->
+  <div id="view-aichat" class="view">
+    <div style="font-size:11px;color:#9a7aaa;margin-bottom:10px;line-height:1.6;background:#0f0b1a;border:1px solid #2a1a4a;border-radius:var(--rs);padding:10px 12px">
+      <b style="color:#ce93d8">✨ AI Task Assistant</b><br>
+      I-chat mo lang ang task mo — bahala na ko sa lahat ng fields!<br>
+      <span style="color:#6a5a8a">Halimbawa: "May 26 assignment in CompProg due 11:59 PM" o "Submit thesis draft bukas, high priority"</span>
+    </div>
+    <div class="ai-chat-wrap" id="ai-chat-wrap">
+      <div class="ai-chat-header">
+        <div>
+          <div class="ai-chat-title"><i class="ti ti-message-bolt" style="font-size:14px"></i>Task AI</div>
+          <div class="ai-chat-sub">Powered by Claude · mag-usap tayo!</div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+          <div id="ai-chat-status" style="font-size:10px;color:#6a5a8a"></div>
+        </div>
+      </div>
+      <div class="ai-api-row">
+        <input class="ai-key-inp" type="password" id="ai-chat-key" placeholder="🔑 Anthropic API key (sk-ant-...)">
+        <button class="ai-key-save" onclick="aiChatSaveKey()">Save</button>
+        <span class="ai-hint" id="ai-key-status">Key not saved</span>
+      </div>
+      <div class="ai-chat-msgs" id="ai-chat-msgs"></div>
+      <div class="ai-chat-input-row">
+        <textarea class="ai-chat-input" id="ai-chat-inp" placeholder="I-type mo ang task mo dito... (Enter to send)" rows="1"></textarea>
+        <button class="ai-send-btn" id="ai-send-btn" title="Send"><i class="ti ti-send" style="font-size:16px"></i></button>
+      </div>
     </div>
   </div>
 
@@ -2166,6 +2240,275 @@ function applyCatFilter(){
 // ===================================================================
 // INIT
 function renderAll(){_renderAllBase();renderCatFilter();initQuote();}
+
+// ===================================================================
+// AI CHAT
+const AI_KEY_STORE = 'tracker_anthropic_key';
+let aiChatHistory = [];
+let aiPendingTask = null;
+
+function aiChatSaveKey(){
+  const k = document.getElementById('ai-chat-key').value.trim();
+  if(!k){alert('Please enter your API key');return;}
+  localStorage.setItem(AI_KEY_STORE, k);
+  document.getElementById('ai-chat-key').value='';
+  document.getElementById('ai-chat-key').placeholder='🔑 API key saved ✅';
+  document.getElementById('ai-key-status').textContent='Key saved ✅';
+  document.getElementById('ai-key-status').style.color='var(--g)';
+}
+
+function aiChatInit(){
+  const k=localStorage.getItem(AI_KEY_STORE);
+  if(k){
+    document.getElementById('ai-chat-key').placeholder='🔑 API key saved ✅';
+    document.getElementById('ai-key-status').textContent='Key saved ✅';
+    document.getElementById('ai-key-status').style.color='var(--g)';
+  }
+  // Welcome message
+  if(!aiChatHistory.length){
+    aiAddMsg('bot', 'Kamusta! 👋 I-type mo lang ang task mo at auto-fill ko na lahat.\n\nHalimbawa:\n• "May 26 assignment in CompProg due 11:59 PM"\n• "Submit thesis draft bukas, high priority"\n• "Math quiz sa June 3, medium priority, MATH101 project"');
+  }
+}
+
+function aiAddMsg(role, text, extraHTML=''){
+  const msgs = document.getElementById('ai-chat-msgs');
+  if(!msgs) return;
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  const now = new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',hour12:true});
+  div.innerHTML = `<div class="ai-msg-bubble">${text.replace(/\n/g,'<br>')}${extraHTML}</div><div class="ai-msg-time">${now}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function aiShowTyping(){
+  const msgs = document.getElementById('ai-chat-msgs');
+  const div = document.createElement('div');
+  div.className = 'ai-msg bot';
+  div.id = 'ai-typing-bubble';
+  div.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function aiRemoveTyping(){
+  const t = document.getElementById('ai-typing-bubble');
+  if(t) t.remove();
+}
+
+function aiGetProjects(){
+  return (D.projects||[]).map(p=>p.name);
+}
+
+function aiGetCategories(){
+  return getCats().map(c=>c.name);
+}
+
+async function aiParseTask(userMsg){
+  const key = localStorage.getItem(AI_KEY_STORE);
+  if(!key){
+    return {error: 'Walang API key! I-save muna ang iyong Anthropic API key sa taas.'};
+  }
+
+  const today = phtToday();
+  const todayObj = new Date(today+'T00:00:00');
+  const todayLabel = todayObj.toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const projects = aiGetProjects();
+  const categories = aiGetCategories();
+
+  const systemPrompt = `You are a smart task parser for a Filipino student's task tracker app. Today is ${todayLabel} (${today}, Philippine Time).
+
+Available projects: ${projects.length ? projects.map((p,i)=>`"${p}"`).join(', ') : 'none yet (will create "My Tasks")'}
+Available categories: ${categories.length ? categories.map(c=>`"${c}"`).join(', ') : 'none'}
+
+Parse the user's message and extract task details. Return ONLY valid JSON, no other text.
+
+JSON format:
+{
+  "taskName": "string (clean task name, no date/time info)",
+  "deadline": "YYYY-MM-DD or null",
+  "deadlineTime": "HH:MM (24hr) or null",
+  "priority": "high|medium|low|none",
+  "project": "exact project name from list or best guess or 'My Tasks'",
+  "category": "exact category name or null",
+  "note": "any extra details or null",
+  "confidence": "high|medium|low",
+  "interpretation": "1 sentence Taglish explanation of what you understood"
+}
+
+Rules:
+- For dates: "bukas"=tomorrow, "mamayang gabi"=tonight, "mamaya"=later today
+- If month/day given without year, assume current year or next if already passed
+- Priority: "ASAP", "urgent", "important", "kailangan agad" = high. Default = none.
+- Match project names case-insensitively. If subject like "CompProg", "Math", "Thesis" mentioned, guess best project.
+- "11:59 PM" = "23:59", "11:59 am" = "11:59"
+- taskName should be clean, professional (e.g. "CompProg Assignment" not "may 26 assignment in CompProg due 11:59 PM")`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json', 'x-api-key': key, 'anthropic-version':'2023-06-01'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        system: systemPrompt,
+        messages: [{role:'user', content: userMsg}]
+      })
+    });
+    const data = await resp.json();
+    if(data.error) return {error: data.error.message || 'API error'};
+    const text = data.content[0].text.trim();
+    const clean = text.replace(/```json|```/g,'').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    return {error: 'Hindi ma-parse. Try again? (' + e.message + ')'};
+  }
+}
+
+function aiTaskPreviewHTML(parsed){
+  const priorityLabels = {high:'🔴 High', medium:'🟡 Medium', low:'🟢 Low', none:'—'};
+  const rows = [
+    ['Task', parsed.taskName || '—'],
+    ['Deadline', parsed.deadline ? (parsed.deadline + (parsed.deadlineTime ? ' ' + fmt12(parsed.deadlineTime) : '')) : '—'],
+    ['Priority', priorityLabels[parsed.priority] || '—'],
+    ['Project', parsed.project || 'My Tasks'],
+    ['Category', parsed.category || '—'],
+    ['Note', parsed.note || '—'],
+  ];
+  return `<div class="ai-task-preview">
+    <div class="ai-task-preview-title"><i class="ti ti-clipboard-check" style="font-size:11px"></i>I-add ko ito?</div>
+    ${rows.map(([l,v])=>`<div class="ai-task-row"><span class="ai-task-label">${l}</span><span class="ai-task-val">${esc(String(v))}</span></div>`).join('')}
+    <div class="ai-confirm-btns">
+      <button class="ai-confirm-btn" onclick="aiConfirmAdd()"><i class="ti ti-check" style="font-size:11px"></i>Oo, i-add!</button>
+      <button class="ai-deny-btn" onclick="aiDenyAdd()">Hindi, baguhin</button>
+    </div>
+  </div>`;
+}
+
+function aiConfirmAdd(){
+  if(!aiPendingTask) return;
+  const p = aiPendingTask;
+
+  // Find or create project
+  let proj = D.projects.find(pr=>pr.name.toLowerCase()===p.project.toLowerCase());
+  if(!proj){
+    if(D.projects.length){
+      // Try partial match
+      proj = D.projects.find(pr=>pr.name.toLowerCase().includes(p.project.toLowerCase()) || p.project.toLowerCase().includes(pr.name.toLowerCase()));
+    }
+    if(!proj){
+      // Create new project
+      proj = {id:uid(), name: p.project||'My Tasks', tasks:[]};
+      D.projects.push(proj);
+    }
+  }
+
+  // Find category
+  let catId = null;
+  if(p.category){
+    const cat = getCats().find(c=>c.name.toLowerCase()===p.category.toLowerCase());
+    if(cat) catId = cat.id;
+  }
+
+  const td2 = phtToday();
+  const nt = {
+    id: uid(),
+    name: p.taskName || 'New Task',
+    done: false,
+    priority: p.priority || 'none',
+    deadline: p.deadline || '',
+    deadlineTime: p.deadlineTime || '',
+    note: p.note || '',
+    category: catId,
+    addedDate: td2
+  };
+  if(!proj.tasks) proj.tasks=[];
+  proj.tasks.push(nt);
+  if(!D.dailyLog[td2]) D.dailyLog[td2]={added:[],done:[]};
+  D.dailyLog[td2].added.push(nt.id);
+  save();
+  renderStats();
+
+  aiPendingTask = null;
+  // Remove confirm buttons from last bot message
+  document.querySelectorAll('.ai-confirm-btns').forEach(el=>el.remove());
+
+  aiAddMsg('bot', `✅ Na-add na! <b style="color:var(--g)">"${p.taskName}"</b> under <b style="color:var(--g)">${proj.name}</b>.\n\nMay iba ka pang task? I-chat mo lang! 😊`);
+}
+
+function aiDenyAdd(){
+  aiPendingTask = null;
+  document.querySelectorAll('.ai-confirm-btns').forEach(el=>el.remove());
+  aiAddMsg('bot', 'Sige, baguhin mo lang — i-type ulit ang task mo ng mas detalyado. 👍');
+}
+
+async function aiSendMessage(){
+  const inp = document.getElementById('ai-chat-inp');
+  const msg = inp.value.trim();
+  if(!msg) return;
+
+  const btn = document.getElementById('ai-send-btn');
+  btn.disabled = true;
+  inp.value = '';
+  inp.style.height = '42px';
+
+  aiAddMsg('user', msg);
+  aiShowTyping();
+
+  const parsed = await aiParseTask(msg);
+  aiRemoveTyping();
+
+  if(parsed.error){
+    aiAddMsg('bot', '❌ ' + parsed.error);
+    btn.disabled = false;
+    return;
+  }
+
+  aiPendingTask = parsed;
+  const previewHTML = aiTaskPreviewHTML(parsed);
+  aiAddMsg('bot', `Naintindihan ko! ${parsed.interpretation || ''}`, previewHTML);
+  btn.disabled = false;
+}
+
+// Wire up the AI chat tab init
+document.querySelectorAll('.tab').forEach(t=>{
+  const origClick = t.onclick;
+  if(t.dataset.tab==='aichat'){
+    t.onclick=()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('view-aichat').classList.add('active');
+      aiChatInit();
+    };
+  }
+});
+
+// AI chat send on enter (shift+enter for newline)
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp = document.getElementById('ai-chat-inp');
+  if(inp){
+    inp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSendMessage();}
+    });
+    inp.addEventListener('input',()=>{
+      inp.style.height='42px';
+      inp.style.height=Math.min(inp.scrollHeight,110)+'px';
+    });
+  }
+  const btn = document.getElementById('ai-send-btn');
+  if(btn) btn.onclick=aiSendMessage;
+
+  // Check saved key on load
+  const k=localStorage.getItem(AI_KEY_STORE);
+  if(k){
+    const ki=document.getElementById('ai-chat-key');
+    const ks=document.getElementById('ai-key-status');
+    if(ki) ki.placeholder='🔑 API key saved ✅';
+    if(ks){ks.textContent='Key saved ✅';ks.style.color='var(--g)';}
+  }
+});
 </script>
 <!-- NOTES PANEL -->
 <div class="notes-overlay" id="notes-overlay">
