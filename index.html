@@ -1166,6 +1166,7 @@ document.querySelectorAll('.tab').forEach(t=>{
       const el=document.getElementById('ai-api-key');
       if(el&&k){el.placeholder='🔑 API key saved ✅';el.value='';}
     },50);}
+    if(tab==='aichat')aiChatInit();
   };
 });
 
@@ -2471,36 +2472,29 @@ async function aiSendMessage(){
   btn.disabled = false;
 }
 
-// Wire up the AI chat tab init
-document.querySelectorAll('.tab').forEach(t=>{
-  const origClick = t.onclick;
-  if(t.dataset.tab==='aichat'){
-    t.onclick=()=>{
-      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-      document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-      t.classList.add('active');
-      document.getElementById('view-aichat').classList.add('active');
-      aiChatInit();
-    };
-  }
-});
+// Expose AI functions to window so inline onclick= attributes can call them
+// (type="module" scripts are isolated — must explicitly attach to window)
+window.aiConfirmAdd = aiConfirmAdd;
+window.aiDenyAdd = aiDenyAdd;
+window.aiChatSaveKey = aiChatSaveKey;
+window.aiSendMessage = aiSendMessage;
 
 // AI chat send on enter (shift+enter for newline)
-document.addEventListener('DOMContentLoaded',()=>{
-  const inp = document.getElementById('ai-chat-inp');
-  if(inp){
-    inp.addEventListener('keydown',e=>{
-      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSendMessage();}
-    });
-    inp.addEventListener('input',()=>{
-      inp.style.height='42px';
-      inp.style.height=Math.min(inp.scrollHeight,110)+'px';
-    });
-  }
-  const btn = document.getElementById('ai-send-btn');
-  if(btn) btn.onclick=aiSendMessage;
+const _aiInp = document.getElementById('ai-chat-inp');
+if(_aiInp){
+  _aiInp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSendMessage();}
+  });
+  _aiInp.addEventListener('input',()=>{
+    _aiInp.style.height='42px';
+    _aiInp.style.height=Math.min(_aiInp.scrollHeight,110)+'px';
+  });
+}
+const _aiBtn = document.getElementById('ai-send-btn');
+if(_aiBtn) _aiBtn.onclick=aiSendMessage;
 
-  // Check saved key on load
+// Check saved key on load
+(()=>{
   const k=localStorage.getItem(AI_KEY_STORE);
   if(k){
     const ki=document.getElementById('ai-chat-key');
@@ -2508,7 +2502,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(ki) ki.placeholder='🔑 API key saved ✅';
     if(ks){ks.textContent='Key saved ✅';ks.style.color='var(--g)';}
   }
-});
+})();
 </script>
 <!-- NOTES PANEL -->
 <div class="notes-overlay" id="notes-overlay">
