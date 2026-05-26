@@ -559,8 +559,51 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
 .rec-manage-sched{font-size:10px;color:var(--t3);line-height:1.5}
 .rec-manage-btns{display:flex;gap:5px;flex-shrink:0}
 .rec-edit-form{display:none;background:var(--bg3);border:1px solid var(--bdr2);border-radius:var(--rs);padding:10px;margin-top:6px;flex-direction:column;gap:7px}
-.rec-edit-form.open{display:flex}
-</style>
+.tab.ai-tab{background:linear-gradient(135deg,#1a0d2e,#0d1a2e);border:1px solid #3a1a6a;color:#ce93d8}
+.tab.ai-tab.active{background:linear-gradient(135deg,#3a1a6a,#1a3a6a);color:#fff;border-color:#ce93d8}
+
+/* AI CHAT */
+.ai-chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 280px);min-height:340px;background:var(--bg2);border:1px solid #2a1a4a;border-radius:var(--r);overflow:hidden}
+.ai-chat-header{padding:10px 14px;background:linear-gradient(135deg,#1a0d2e,#0d1a2e);border-bottom:1px solid #2a1a4a;display:flex;align-items:center;gap:8px}
+.ai-chat-title{font-size:13px;font-weight:700;color:#ce93d8;display:flex;align-items:center;gap:6px}
+.ai-chat-sub{font-size:10px;color:#9a7aaa;margin-top:2px}
+.ai-chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin;scrollbar-color:var(--bdr2) transparent}
+.ai-msg{display:flex;flex-direction:column;gap:3px;max-width:88%}
+.ai-msg.user{align-self:flex-end;align-items:flex-end}
+.ai-msg.bot{align-self:flex-start;align-items:flex-start}
+.ai-msg-bubble{padding:9px 13px;border-radius:14px;font-size:12px;line-height:1.6;word-break:break-word}
+.ai-msg.user .ai-msg-bubble{background:linear-gradient(135deg,#2a1a5a,#1a2a5a);color:#ddd8ff;border:1px solid #4a2a8a;border-bottom-right-radius:4px}
+.ai-msg.bot .ai-msg-bubble{background:var(--bg3);color:var(--t);border:1px solid var(--bdr2);border-bottom-left-radius:4px}
+.ai-msg-time{font-size:9px;color:var(--t3);padding:0 4px}
+.ai-chat-input-row{display:flex;gap:6px;padding:10px;border-top:1px solid #2a1a4a;background:#0f0b1a}
+.ai-chat-input{flex:1;background:#1a1428;border:1px solid #3a2a6a;border-radius:22px;padding:10px 16px;color:#ddd8ff;font-family:inherit;font-size:13px;outline:none;resize:none;height:42px;max-height:110px;overflow-y:auto;transition:border-color .15s;line-height:1.4}
+.ai-chat-input:focus{border-color:#ce93d8}
+.ai-chat-input::placeholder{color:#6a5a8a}
+.ai-send-btn{background:linear-gradient(135deg,#3a1a6a,#1a3a6a);border:1px solid #ce93d8;border-radius:50%;width:42px;height:42px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.ai-send-btn:hover{background:linear-gradient(135deg,#5a2a9a,#2a5a9a)}
+.ai-send-btn:disabled{opacity:.4;cursor:default}
+.ai-task-preview{background:#0f1a0f;border:1px solid var(--g3);border-radius:var(--rs);padding:10px 12px;margin-top:6px;font-size:11px}
+.ai-task-preview-title{font-size:10px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.ai-task-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #162016}
+.ai-task-row:last-child{border-bottom:none}
+.ai-task-label{color:var(--t3);font-size:10px}
+.ai-task-val{color:var(--t);font-size:11px;font-weight:500;text-align:right;max-width:60%}
+.ai-confirm-btns{display:flex;gap:6px;margin-top:8px}
+.ai-confirm-btn{background:var(--g3);border:1px solid var(--g2);border-radius:var(--rs);padding:6px 14px;color:#d4f7d4;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:4px}
+.ai-confirm-btn:hover{background:var(--g2)}
+.ai-deny-btn{background:transparent;border:1px solid var(--bdr2);border-radius:var(--rs);padding:6px 14px;color:var(--t3);font-family:inherit;font-size:11px;cursor:pointer;flex:1}
+.ai-deny-btn:hover{border-color:var(--red);color:var(--red)}
+.ai-typing{display:flex;align-items:center;gap:4px;padding:9px 13px;background:var(--bg3);border:1px solid var(--bdr2);border-radius:14px;border-bottom-left-radius:4px;width:56px}
+.ai-typing span{width:6px;height:6px;border-radius:50%;background:#ce93d8;display:inline-block;animation:aiDot 1.2s ease-in-out infinite}
+.ai-typing span:nth-child(2){animation-delay:.2s}
+.ai-typing span:nth-child(3){animation-delay:.4s}
+@keyframes aiDot{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.ai-api-row{display:flex;gap:6px;align-items:center;padding:8px 14px;background:#0d0a1a;border-bottom:1px solid #2a1a4a;flex-wrap:wrap}
+.ai-key-inp{flex:1;min-width:160px;background:#1a1428;border:1px solid #3a2a6a;border-radius:var(--rs);padding:7px 10px;color:#ddd8ff;font-family:inherit;font-size:11px;outline:none}
+.ai-key-inp:focus{border-color:#ce93d8}
+.ai-key-save{background:#2a1a5a;border:1px solid #6a4aaa;border-radius:var(--rs);padding:7px 12px;color:#ce93d8;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ai-key-save:hover{background:#3a2a6a}
+.ai-hint{font-size:10px;color:#7a6aaa;padding:2px 0}
 </head>
 <body>
 
@@ -615,6 +658,7 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
     <button class="tab" data-tab="urgent"><i class="ti ti-alert-triangle"></i><span>Urgent</span></button>
     <button class="tab" data-tab="insights"><i class="ti ti-chart-bar"></i><span>Insights</span></button>
     <button class="tab review-tab" data-tab="reviewcall"><i class="ti ti-cards"></i><span>ReviewCall</span></button>
+    <button class="tab ai-tab" data-tab="aichat"><i class="ti ti-message-bolt"></i><span>AI Add</span></button>
   </div>
 
   <div class="stats">
@@ -818,6 +862,37 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
         </div>
       </div>
       <div class="card-list" id="card-list"></div>
+    </div>
+  </div>
+
+  <!-- AI CHAT -->
+  <div id="view-aichat" class="view">
+    <div style="font-size:11px;color:#9a7aaa;margin-bottom:10px;line-height:1.6;background:#0f0b1a;border:1px solid #2a1a4a;border-radius:var(--rs);padding:10px 12px">
+      <b style="color:#ce93d8">✨ AI Task Assistant</b><br>
+      I-chat mo lang ang task mo — bahala na ko sa lahat ng fields!<br>
+      <span style="color:#6a5a8a">Halimbawa: "May 26 assignment in CompProg due 11:59 PM" o "Submit thesis draft bukas, high priority"</span>
+    </div>
+    <div class="ai-chat-wrap" id="ai-chat-wrap">
+      <div class="ai-chat-header">
+        <div>
+          <div class="ai-chat-title"><i class="ti ti-message-bolt" style="font-size:14px"></i>Task AI</div>
+          <div class="ai-chat-sub">Powered by Groq · mag-usap tayo!</div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+          <div id="ai-chat-status" style="font-size:10px;color:#6a5a8a"></div>
+        </div>
+      </div>
+      <div class="ai-api-row">
+        <input class="ai-key-inp" type="password" id="ai-chat-key" placeholder="🔑 Groq API key (gsk_...)">
+        <button class="ai-key-save" onclick="aiChatSaveKey()">Save</button>
+        <a href="https://console.groq.com/keys" target="_blank" style="font-size:10px;color:#64b5f6;text-decoration:none;white-space:nowrap">Free key ↗</a>
+        <span class="ai-hint" id="ai-key-status">Key not saved</span>
+      </div>
+      <div class="ai-chat-msgs" id="ai-chat-msgs"></div>
+      <div class="ai-chat-input-row">
+        <textarea class="ai-chat-input" id="ai-chat-inp" placeholder="I-type mo ang task mo dito... (Enter to send)" rows="1"></textarea>
+        <button class="ai-send-btn" id="ai-send-btn" title="Send"><i class="ti ti-send" style="font-size:16px"></i></button>
+      </div>
     </div>
   </div>
 
@@ -1092,6 +1167,7 @@ document.querySelectorAll('.tab').forEach(t=>{
       const el=document.getElementById('ai-api-key');
       if(el&&k){el.placeholder='🔑 API key saved ✅';el.value='';}
     },50);}
+    if(tab==='aichat')aiChatInit();
   };
 });
 
@@ -2166,6 +2242,323 @@ function applyCatFilter(){
 // ===================================================================
 // INIT
 function renderAll(){_renderAllBase();renderCatFilter();initQuote();}
+
+// ===================================================================
+// AI CHAT — powered by Groq (CORS-safe, works on GitHub Pages)
+// ===================================================================
+const AI_KEY_STORE = 'tracker_groq_key';
+let aiChatHistory = []; // multi-turn memory within session
+let aiPendingTask = null;
+let aiIsBusy = false;
+
+function aiChatSaveKey(){
+  const k = document.getElementById('ai-chat-key').value.trim();
+  if(!k){alert('Please enter your Groq API key');return;}
+  localStorage.setItem(AI_KEY_STORE, k);
+  document.getElementById('ai-chat-key').value='';
+  document.getElementById('ai-chat-key').placeholder='🔑 Groq key saved ✅';
+  document.getElementById('ai-key-status').textContent='Key saved ✅';
+  document.getElementById('ai-key-status').style.color='var(--g)';
+}
+
+function aiChatInit(){
+  try {
+    const k=localStorage.getItem(AI_KEY_STORE);
+    if(k){
+      const ki=document.getElementById('ai-chat-key');
+      const ks=document.getElementById('ai-key-status');
+      if(ki) ki.placeholder='🔑 Groq key saved ✅';
+      if(ks){ks.textContent='Key saved ✅';ks.style.color='var(--g)';}
+    }
+    if(!aiChatHistory.length){
+      aiAddMsg('bot','Kamusta! 👋 I-describe mo lang ang task mo — pwede Tagalog, English, o Taglish!\n\nHalimbawa:\n• "May assignment sa CompProg due Friday 11:59pm"\n• "Submit thesis draft bukas, high priority"\n• "Study para sa Math midterms this Sunday"');
+    }
+  } catch(e){ console.error('aiChatInit error',e); }
+}
+
+function aiAddMsg(role, text, extraHTML=''){
+  try {
+    const msgs = document.getElementById('ai-chat-msgs');
+    if(!msgs) return;
+    const div = document.createElement('div');
+    div.className = `ai-msg ${role}`;
+    const now = new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit',hour12:true});
+    div.innerHTML = `<div class="ai-msg-bubble">${text.replace(/\n/g,'<br>')}${extraHTML}</div><div class="ai-msg-time">${now}</div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  } catch(e){ console.error('aiAddMsg error',e); }
+}
+
+function aiShowTyping(){
+  try {
+    const msgs = document.getElementById('ai-chat-msgs');
+    if(!msgs) return;
+    const div = document.createElement('div');
+    div.className = 'ai-msg bot';
+    div.id = 'ai-typing-bubble';
+    div.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  } catch(e){}
+}
+
+function aiRemoveTyping(){
+  try { const t=document.getElementById('ai-typing-bubble'); if(t)t.remove(); } catch(e){}
+}
+
+function aiGetProjects(){ return (D.projects||[]).map(p=>p.name); }
+function aiGetCategories(){ return getCats().map(c=>c.name); }
+
+async function aiCallGroq(messages){
+  const key = localStorage.getItem(AI_KEY_STORE);
+  if(!key) return {error:'no_key'};
+
+  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      temperature: 0.2,
+      max_tokens: 700,
+      messages
+    })
+  });
+
+  if(!resp.ok){
+    const errData = await resp.json().catch(()=>({}));
+    const errMsg = errData?.error?.message || `HTTP ${resp.status}`;
+    // Friendly error messages
+    if(resp.status===401) return {error:'invalid_key'};
+    if(resp.status===429) return {error:'rate_limit'};
+    return {error: errMsg};
+  }
+
+  const data = await resp.json();
+  return {text: data.choices?.[0]?.message?.content || ''};
+}
+
+async function aiParseTask(userMsg){
+  const today = phtToday();
+  const todayObj = new Date(today+'T00:00:00');
+  const todayLabel = todayObj.toLocaleDateString('en-PH',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const projects = aiGetProjects();
+  const categories = aiGetCategories();
+
+  const systemPrompt = `Ikaw ay isang matalinong task parser para sa isang Filipino student's task tracker app.
+Ngayon ay ${todayLabel} (${today}, Philippine Time / PHT).
+
+Existing projects ng user: ${projects.length ? projects.map(p=>`"${p}"`).join(', ') : 'wala pa (gagawa ng "My Tasks")'}
+Available categories: ${categories.join(', ')}
+
+Ang trabaho mo: i-parse ang sinabi ng user at i-extract ang task details. Mag-reply ONLY ng valid JSON — walang ibang text, walang markdown backticks.
+
+JSON format:
+{
+  "taskName": "malinaw na task name (walang date/time)",
+  "deadline": "YYYY-MM-DD o null",
+  "deadlineTime": "HH:MM (24-hour format) o null",
+  "priority": "high|medium|low|none",
+  "project": "pinaka-matching na project name mula sa list, o magmungkahi ng bagong short name",
+  "category": "pinaka-matching na category mula sa list o null",
+  "note": "extra context kung mayroon, o null",
+  "interpretation": "isang maikling Taglish sentence — ipaliwanag kung ano ang naintindihan mo at bakit mo pinili ang category/project"
+}
+
+Mga rules:
+- "bukas" = tomorrow, "mamayang gabi" = tonight, "mamaya" = later today, "sa Sabado" = next Saturday
+- Kung may month+day lang (walang year), gamitin ang current year; kung passed na, next year
+- "11:59 PM" → "23:59", "3am" → "03:00"
+- priority: "ASAP/urgent/important/kailangan agad/need to finish" = high; "later/pwede pa" = low; default = none
+- Subukan i-match ang project names kahit partial (e.g. "CompProg" → "Computer Programming" kung ganyan ang existing)
+- Kung walang matching project, gumawa ng maayos na project name mula sa context (e.g. subject name)
+- taskName dapat professional at malinis — huwag kasama ang dates o priority words`;
+
+  // Build messages array: system + history + new user message
+  const messages = [
+    {role:'system', content: systemPrompt},
+    ...aiChatHistory.slice(-6), // last 3 turns for context
+    {role:'user', content: userMsg}
+  ];
+
+  const result = await aiCallGroq(messages);
+  if(result.error) return result;
+
+  try {
+    const clean = result.text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    // Save to history for follow-up corrections
+    aiChatHistory.push({role:'user',content:userMsg});
+    aiChatHistory.push({role:'assistant',content:result.text});
+    return parsed;
+  } catch(e) {
+    return {error: 'parse_fail', raw: result.text};
+  }
+}
+
+function aiFormatDeadline(deadline, deadlineTime){
+  if(!deadline) return '—';
+  try {
+    const d = new Date(deadline+'T00:00:00');
+    const dateStr = d.toLocaleDateString('en-PH',{weekday:'short',month:'short',day:'numeric'});
+    return dateStr + (deadlineTime ? ' · ' + fmt12(deadlineTime) : '');
+  } catch(e){ return deadline; }
+}
+
+function aiTaskPreviewHTML(parsed){
+  const priorityLabels = {high:'🔴 High',medium:'🟡 Medium',low:'🟢 Low',none:'—'};
+  const rows = [
+    ['Task',     parsed.taskName||'—'],
+    ['Deadline', aiFormatDeadline(parsed.deadline, parsed.deadlineTime)],
+    ['Priority', priorityLabels[parsed.priority]||'—'],
+    ['Project',  parsed.project||'My Tasks'],
+    ['Category', parsed.category||'—'],
+  ];
+  if(parsed.note) rows.push(['Note', parsed.note]);
+  return `<div class="ai-task-preview">
+    <div class="ai-task-preview-title"><i class="ti ti-clipboard-check" style="font-size:11px"></i>Tama ba ito?</div>
+    ${rows.map(([l,v])=>`<div class="ai-task-row"><span class="ai-task-label">${l}</span><span class="ai-task-val">${esc(String(v))}</span></div>`).join('')}
+    <div class="ai-confirm-btns">
+      <button class="ai-confirm-btn" onclick="aiConfirmAdd()"><i class="ti ti-check" style="font-size:11px"></i>Oo, i-add!</button>
+      <button class="ai-deny-btn" onclick="aiDenyAdd()">Baguhin</button>
+    </div>
+  </div>`;
+}
+
+function aiConfirmAdd(){
+  try {
+    if(!aiPendingTask) return;
+    const p = aiPendingTask;
+
+    // Find or create project — exact match first, then partial
+    let proj = D.projects.find(pr=>pr.name.toLowerCase()===p.project.toLowerCase());
+    if(!proj) proj = D.projects.find(pr=>pr.name.toLowerCase().includes(p.project.toLowerCase())||p.project.toLowerCase().includes(pr.name.toLowerCase()));
+    if(!proj){
+      proj = {id:uid(), name: p.project||'My Tasks', tasks:[]};
+      D.projects.unshift(proj);
+    }
+
+    // Find category id
+    let catId = null;
+    if(p.category){
+      const cat = getCats().find(c=>c.name.toLowerCase()===p.category.toLowerCase());
+      if(cat) catId = cat.id;
+    }
+
+    const td2 = phtToday();
+    const nt = {
+      id:uid(), name:p.taskName||'New Task', done:false,
+      priority:p.priority||'none',
+      deadline:p.deadline||'', deadlineTime:p.deadlineTime||'',
+      note:p.note||'', category:catId, addedDate:td2
+    };
+    if(!proj.tasks) proj.tasks=[];
+    proj.tasks.push(nt);
+    if(!D.dailyLog[td2]) D.dailyLog[td2]={added:[],done:[]};
+    D.dailyLog[td2].added.push(nt.id);
+    save(); renderAll();
+
+    aiPendingTask = null;
+    document.querySelectorAll('.ai-confirm-btns').forEach(el=>el.remove());
+    aiChatHistory = []; // fresh start after adding
+    aiAddMsg('bot', `✅ Na-add na ang <b style="color:var(--g)">"${esc(p.taskName)}"</b> sa project na <b style="color:var(--g)">${esc(proj.name)}</b>! 🎉\n\nMay iba ka pang task? I-describe mo lang!`);
+  } catch(e){
+    console.error('aiConfirmAdd error',e);
+    aiAddMsg('bot','May error sa pag-add. Try mo ulit.');
+  }
+}
+
+function aiDenyAdd(){
+  try {
+    aiPendingTask = null;
+    document.querySelectorAll('.ai-confirm-btns').forEach(el=>el.remove());
+    aiAddMsg('bot','Sige! I-describe mo ulit ang task — pwede mong sabihin kung ano ang mali, hal. "dapat Medium priority lang" o "different project siya". 👍');
+  } catch(e){}
+}
+
+async function aiSendMessage(){
+  try {
+    if(aiIsBusy) return;
+    const inp = document.getElementById('ai-chat-inp');
+    if(!inp) return;
+    const msg = inp.value.trim();
+    if(!msg) return;
+
+    // Check key first
+    const key = localStorage.getItem(AI_KEY_STORE);
+    if(!key){
+      aiAddMsg('bot','⚠️ Wala pang Groq API key! I-save muna ang iyong key sa field sa taas.\n\nKumuha ng libre sa: <a href="https://console.groq.com/keys" target="_blank" style="color:#64b5f6">console.groq.com/keys</a>');
+      return;
+    }
+
+    aiIsBusy = true;
+    const btn = document.getElementById('ai-send-btn');
+    if(btn) btn.disabled = true;
+    inp.value = '';
+    inp.style.height = '42px';
+
+    aiAddMsg('user', msg);
+    aiShowTyping();
+
+    const parsed = await aiParseTask(msg);
+    aiRemoveTyping();
+
+    if(parsed.error){
+      const errMsgs = {
+        'no_key': '⚠️ Walang API key pa. I-save muna sa field sa taas.',
+        'invalid_key': '❌ Invalid ang Groq API key. I-check mo ulit sa <a href="https://console.groq.com/keys" target="_blank" style="color:#64b5f6">console.groq.com</a>.',
+        'rate_limit': '⏳ Rate limit — sandali lang bago mo ulit subukan.',
+        'parse_fail': '🤔 Hindi ko na-parse ang sagot ng AI. Subukan ulit?'
+      };
+      aiAddMsg('bot', errMsgs[parsed.error] || '❌ Error: ' + parsed.error);
+      aiIsBusy = false;
+      if(btn) btn.disabled = false;
+      return;
+    }
+
+    aiPendingTask = parsed;
+    aiAddMsg('bot', parsed.interpretation || 'Naintindihan ko ang task mo!', aiTaskPreviewHTML(parsed));
+
+  } catch(e){
+    console.error('aiSendMessage error', e);
+    aiRemoveTyping();
+    aiAddMsg('bot','❌ May unexpected error. Check mo ang console para sa details.');
+  } finally {
+    aiIsBusy = false;
+    const btn = document.getElementById('ai-send-btn');
+    if(btn) btn.disabled = false;
+  }
+}
+
+// Expose to window (needed because script is type="module")
+window.aiConfirmAdd = aiConfirmAdd;
+window.aiDenyAdd = aiDenyAdd;
+window.aiChatSaveKey = aiChatSaveKey;
+window.aiSendMessage = aiSendMessage;
+
+// Wire up input events
+try {
+  const _aiInp = document.getElementById('ai-chat-inp');
+  if(_aiInp){
+    _aiInp.addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSendMessage();}
+    });
+    _aiInp.addEventListener('input',()=>{
+      _aiInp.style.height='42px';
+      _aiInp.style.height=Math.min(_aiInp.scrollHeight,110)+'px';
+    });
+  }
+  const _aiBtn = document.getElementById('ai-send-btn');
+  if(_aiBtn) _aiBtn.onclick=aiSendMessage;
+  // Load saved key hint
+  const _k=localStorage.getItem(AI_KEY_STORE);
+  if(_k){
+    const ki=document.getElementById('ai-chat-key');
+    const ks=document.getElementById('ai-key-status');
+    if(ki) ki.placeholder='🔑 Groq key saved ✅';
+    if(ks){ks.textContent='Key saved ✅';ks.style.color='var(--g)';}
+  }
+} catch(e){ console.error('AI init error',e); }
 </script>
 <!-- NOTES PANEL -->
 <div class="notes-overlay" id="notes-overlay">
