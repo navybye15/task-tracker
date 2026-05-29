@@ -45,7 +45,7 @@ body{display:flex;flex-direction:column}
 .btn-so:hover{background:#2a1010}
 
 /* STREAK PANEL */
-.streak-panel{display:none;position:fixed;top:60px;right:12px;background:var(--bg2);border:1px solid var(--bdr2);border-radius:var(--r);padding:16px;z-index:250;width:min(340px,calc(100vw - 24px));box-shadow:0 8px 24px rgba(0,0,0,.7);max-height:calc(100vh - 80px);overflow-y:auto}
+.streak-panel{display:none;position:fixed;top:60px;right:12px;background:var(--bg2);border:1px solid var(--bdr2);border-radius:var(--r);padding:16px;z-index:250;width:min(340px,calc(100vw - 24px));box-shadow:0 8px 24px rgba(0,0,0,.7)}
 .streak-panel.show{display:block}
 .streak-panel-title{font-size:13px;font-weight:700;color:var(--t);margin-bottom:4px}
 .streak-panel-sub{font-size:11px;color:var(--t3);margin-bottom:12px}
@@ -492,139 +492,163 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
 .insight-val{color:var(--t);font-weight:600}
 
 @media(max-width:520px){
-  /* APP CONTAINER */
-  #app{padding:8px 8px 24px}
+  /* ── LAYOUT ── */
+  #app{padding:8px 8px 100px}
 
-  /* TOPBAR */
-  .topbar{flex-wrap:nowrap;gap:6px;padding-bottom:8px;margin-bottom:8px}
-  .app-title{font-size:11px;letter-spacing:1px}
-  .topbar-right{gap:5px}
-  .streak-display{padding:4px 7px;border-radius:12px}
-  .streak-flame{font-size:14px}
-  .streak-num{font-size:12px}
+  /* ── TOPBAR ── */
+  .topbar{padding-bottom:8px;margin-bottom:8px}
+  .app-title{font-size:11px}
+  .streak-display{padding:4px 8px}
   .streak-label{display:none}
-  .user-btn{padding:4px 7px 4px 4px;font-size:10px}
+  .streak-num{font-size:12px}
+  .user-btn{padding:4px 8px 4px 4px;font-size:10px}
   .uav{width:20px;height:20px;font-size:10px}
-  #uname{max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .user-menu{top:50px;right:8px;min-width:170px}
 
-  /* TABS — icon only, scrollable */
-  .tabs{gap:1px;padding:2px}
-  .tab{padding:9px 7px;min-height:40px;min-width:40px}
-  .tab span{display:none}
+  /* ── PHT BAR ── */
+  .pht-bar{padding:5px 10px;font-size:10px;margin-bottom:8px}
+
+  /* ── TABS — bottom nav bar on mobile ── */
+  .tabs{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    z-index:200;
+    margin:0;
+    border-radius:0;
+    border:none;
+    border-top:1px solid var(--bdr2);
+    padding:4px 2px;
+    gap:0;
+    background:rgba(13,16,13,0.97);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+    overflow:visible;
+  }
+  .tab{
+    flex:none;
+    padding:6px 2px 4px;
+    font-size:9px;
+    border-radius:8px;
+    min-height:44px;
+    flex-direction:column;
+    gap:2px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .tab span{display:block;font-size:8px;line-height:1.1;text-align:center;margin-top:1px}
   .tab i{font-size:16px}
+  .tab.active{background:var(--g3)}
+  .tab.review-tab{background:transparent;border:none}
+  .tab.review-tab.active{background:linear-gradient(135deg,#1a4a7a,#1a5a3a)}
 
-  /* STATS */
-  .stats{grid-template-columns:repeat(2,1fr);gap:5px}
-  .stat{padding:8px 4px}
+  /* ── STATS ── */
+  .stats{grid-template-columns:repeat(2,1fr);gap:5px;margin-bottom:8px}
+  .stat{padding:6px 4px}
   .stat-n{font-size:16px}
   .stat-l{font-size:8px}
 
-  /* PHT BAR */
-  .pht-bar{padding:5px 10px;font-size:10px}
+  /* ── QUOTE ── */
+  .quote-card{padding:10px 12px;margin-bottom:8px}
+  .quote-text{font-size:12px}
 
-  /* WEEK NAV */
+  /* ── WEEK NAV ── */
   .week-nav{gap:5px;margin-bottom:8px}
-  .week-nav-btn{padding:7px 10px;min-width:36px}
   .week-label{font-size:11px}
+  .week-nav-btn{padding:6px 10px;min-width:34px}
   .week-today-btn{padding:5px 8px;font-size:10px}
 
-  /* ADD ROW (task input + button) */
-  .add-row{flex-direction:column;gap:6px}
-  .add-row .btn{width:100%;justify-content:center}
+  /* ── DAY BLOCKS ── */
+  .day-header{padding:8px 10px}
+  .day-name{font-size:12px}
+  .day-body{padding:6px 8px 8px}
+  .day-task{gap:6px;padding:5px 0}
+  .day-task-name{font-size:12px}
+  .day-quick-add{flex-wrap:nowrap;gap:4px}
+  .day-quick-inp{font-size:12px;padding:6px 8px}
+  .day-quick-btn{padding:6px 8px;font-size:11px}
 
-  /* META INPUTS */
-  .add-meta,.add-meta2{flex-direction:column;gap:5px}
-  .add-meta select,.add-meta input,.add-meta2 input{min-width:unset;width:100%;font-size:13px;padding:10px 11px}
-
-  /* TASK ROW */
-  .task{padding:10px 8px;gap:7px}
-  .chk{width:20px;height:20px;min-width:20px}
+  /* ── TASKS inside projects ── */
+  .task{padding:8px 8px;gap:6px}
   .task-name{font-size:12px}
-  .btn-del{padding:8px;min-height:36px;min-width:36px}
+  .chk{width:20px;height:20px;min-width:20px}
 
-  /* DAY BLOCK */
-  .day-task{padding:8px 4px;gap:7px}
-  .day-task-chk{width:20px;height:20px;min-width:20px;border-radius:5px}
-  .day-task-name{font-size:13px}
-  .day-task-actions{gap:2px}
-  .btn-focus{padding:7px;min-height:34px;min-width:34px}
-  .day-quick-add{gap:5px}
-  .day-quick-btn{padding:8px 10px;font-size:12px}
+  /* ── ADD TASK FORM ── */
+  .add-task-box{padding:10px 8px}
+  .add-meta,.add-meta2{flex-direction:column;gap:5px}
+  .add-meta select,.add-meta input,.add-meta2 input{min-width:unset;width:100%;font-size:13px;padding:9px 10px}
+  .add-t-row{gap:5px}
+  .inp-sm{font-size:13px;padding:9px 10px}
 
-  /* FOCUS TIMER */
-  .timer-disp{font-size:28px;letter-spacing:2px}
+  /* ── PROJECT CARDS ── */
+  .proj-hd{padding:10px 10px}
+  .proj-name{font-size:13px}
+  .proj-bd{padding:0 8px 10px}
+
+  /* ── BUTTONS — bigger tap targets ── */
+  .btn{padding:10px 14px;font-size:13px}
+  .btn-sm{padding:8px 12px;font-size:12px}
+  .btn-outline{padding:8px 12px;font-size:12px}
+  .btn-del{padding:7px;min-height:34px;min-width:30px}
+  .btn-focus{padding:5px 7px;min-height:30px;min-width:30px}
+  .day-task-chk{width:20px;height:20px;min-width:20px}
+
+  /* ── CAT FILTER ── */
+  .cat-filter-row{gap:4px;margin-bottom:8px}
+  .cat-filter-btn{padding:4px 10px;font-size:11px}
+
+  /* ── MODAL ── */
+  .modal{max-width:100%;margin:0 12px}
+  .modal-bg{padding:16px 0;align-items:flex-end}
+  .modal{border-radius:14px 14px 0 0;padding:20px 16px 28px}
+
+  /* ── FOCUS TIMER ── */
+  .timer-disp{font-size:28px}
   .timer-row{gap:6px}
-  .btn-timer{padding:10px 12px;font-size:12px;min-height:40px}
-  .focus-task-name{font-size:14px}
+  .focus-box{padding:14px 12px}
 
-  /* RECURRING */
-  .recur-form,.rec-advanced{gap:8px}
-  .rec-row{flex-direction:column;gap:6px}
-  .rec-row select,.rec-row input{min-width:unset;width:100%}
-  .rec-interval-row{flex-wrap:wrap}
-  .dpb{min-width:36px;padding:7px 6px;font-size:11px}
-
-  /* CALENDAR */
-  .cal-day{min-height:32px}
+  /* ── CALENDAR ── */
+  .cal-day{min-height:30px}
   .cal-day-num{font-size:10px}
 
-  /* DECK GRID */
-  .deck-grid{grid-template-columns:repeat(2,1fr);gap:8px}
-  .deck-card{padding:12px 10px}
-  .deck-name{font-size:12px}
-
-  /* REVIEW MODE CHOICES */
+  /* ── REVIEW MODE ── */
   .rm-choices{grid-template-columns:1fr}
-  .rm-choice{padding:12px;font-size:13px}
+  .rm-choice{padding:12px 14px;font-size:13px}
+  .rm-card{padding:18px 16px}
   .rm-question{font-size:15px}
 
-  /* AI CHAT */
-  .ai-chat-wrap{height:calc(100vh - 240px);min-height:300px}
-  .ai-chat-input-row{padding:8px;gap:5px}
-  .ai-chat-input{font-size:13px;padding:9px 14px}
-  .ai-send-btn{width:40px;height:40px}
-  .ai-api-row{padding:7px 10px;gap:6px}
-  .ai-key-inp{font-size:11px;padding:7px 9px}
-  .ai-msg{max-width:92%}
-  .ai-msg-bubble{font-size:12px;padding:8px 11px}
+  /* ── DECK GRID ── */
+  .deck-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .deck-card{padding:12px 10px}
 
-  /* MODALS */
-  .modal{padding:16px;border-radius:12px}
-  .modal-title{font-size:14px}
-  .modal-btns{flex-direction:column;gap:6px}
-  .modal-btns .btn,.modal-btns .btn-outline{width:100%;justify-content:center}
+  /* ── AI CHAT TAB ── */
+  .ai-chat-wrap{border-radius:var(--r)}
+  .ai-chat-input-row{padding:8px}
+  .ai-chat-input{font-size:13px}
 
-  /* BUTTONS */
-  .btn,.btn-outline,.btn-sm{min-height:40px}
-  .btn-outline{padding:9px 13px}
+  /* ── NOTES PANEL ── */
+  .notes-panel{max-height:90vh}
+  .notes-textarea{min-height:140px;font-size:13px}
 
-  /* NOTES PANEL */
-  .notes-panel{border-radius:16px 16px 0 0}
-  .notes-header{padding:12px 14px}
-  .notes-actions{padding:0 14px 12px;gap:5px}
-  .notes-save-btn,.notes-del-btn{min-height:40px}
-
-  /* INSIGHTS */
+  /* ── INSIGHTS ── */
   .insight-card{padding:10px}
+  .insight-row{font-size:12px}
 
-  /* STREAK PANEL */
-  .streak-panel{top:auto;bottom:0;left:0;right:0;border-radius:16px 16px 0 0;width:100%;max-width:100%}
+  /* ── STREAK PANEL ── */
+  .streak-panel{top:52px;right:8px;width:calc(100vw - 16px)}
 
-  /* USER MENU */
-  .user-menu{right:8px}
-
-  /* CATEGORY FILTER */
-  .cat-filter-row{gap:4px}
-  .cat-filter-btn{padding:4px 9px;font-size:11px}
+  /* ── URGENT ── */
+  .at-item{padding:8px 8px}
+  .urgent-section-title{font-size:11px;padding:6px 8px}
 }
 
 /* Tablet tweaks */
-@media(max-width:380px){
-  .tab{padding:8px 5px;min-width:36px}
-  .tab i{font-size:15px}
-  .stats{gap:4px}
-  .stat-n{font-size:15px}
-  #uname{display:none}
+@media(min-width:521px) and (max-width:780px){
+  #app{padding:12px 14px 30px}
+  .tabs{overflow-x:auto}
+  .tab span{font-size:9px}
 }
 
 @media(min-width:781px){#app{padding:18px 26px 40px}}
@@ -731,6 +755,33 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
 .ai-key-save{background:#2a1a5a;border:1px solid #6a4aaa;border-radius:var(--rs);padding:7px 12px;color:#ce93d8;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
 .ai-key-save:hover{background:#3a2a6a}
 .ai-hint{font-size:10px;color:#7a6aaa;padding:2px 0}
+
+/* ===== NOTIFICATIONS ===== */
+.notif-btn{background:none;border:1px solid var(--bdr2);border-radius:var(--rs);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);transition:all .15s;position:relative;flex-shrink:0;touch-action:manipulation}
+.notif-btn:hover{border-color:#ffb74d;color:#ffb74d}
+.notif-btn.on{border-color:#ffb74d;color:#ffb74d;background:#1a1200}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:#ffb74d;border:1.5px solid var(--bg);display:none}
+.notif-dot.show{display:block}
+.notif-modal-bg{display:none;position:fixed;inset:0;background:rgba(4,8,4,.75);z-index:700;align-items:flex-end;justify-content:center;padding:0}
+.notif-modal-bg.open{display:flex;animation:fadeInBg .2s ease}
+.notif-modal{background:var(--bg2);border:1px solid var(--bdr2);border-top:2px solid #ffb74d;border-radius:18px 18px 0 0;width:100%;max-width:520px;padding:24px 20px 36px;animation:slideUp .25s ease;position:relative}
+.notif-modal-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:6px;color:#ffb74d}
+.notif-modal-sub{font-size:11px;color:var(--t3);margin-bottom:16px}
+.notif-perm-badge{font-size:12px;padding:7px 12px;border-radius:8px;background:var(--bg3);border:1px solid var(--bdr2);text-align:center;margin-bottom:14px}
+.notif-section-title{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;margin:12px 0 7px}
+.notif-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rs);margin-bottom:5px}
+.notif-row-left{display:flex;flex-direction:column;gap:2px}
+.notif-row-label{font-size:13px;display:flex;align-items:center;gap:7px}
+.notif-row-sub{font-size:10px;color:var(--t3)}
+.toggle-sw{position:relative;width:44px;height:25px;flex-shrink:0}
+.toggle-sw input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:#2a2a2a;border-radius:13px;cursor:pointer;transition:background .2s}
+.toggle-track::before{content:'';position:absolute;height:19px;width:19px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.toggle-sw input:checked + .toggle-track{background:#ffb74d}
+.toggle-sw input:checked + .toggle-track::before{transform:translateX(19px)}
+.notif-save-btn{width:100%;margin-top:18px;background:linear-gradient(135deg,#2a1c00,#0d2010);border:1px solid #ffb74d;border-radius:var(--rs);padding:13px;color:#ffb74d;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .15s;touch-action:manipulation}
+.notif-save-btn:hover{background:linear-gradient(135deg,#3a2800,#1a3a1a)}
+.notif-modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:20px;display:flex;align-items:center;padding:5px;touch-action:manipulation}
 </style>
 </head>
 <body>
@@ -754,6 +805,7 @@ input:focus,select:focus,textarea:focus{animation:inputFocus .2s ease forwards;b
         <span class="streak-label">streak</span>
       </div>
       <div class="user-btn" id="user-btn"><div class="uav" id="uav">?</div><span id="uname">User</span><i class="ti ti-chevron-down" style="font-size:10px;color:var(--t3)"></i></div>
+      <button class="notif-btn" id="notif-btn" title="Notification Settings"><i class="ti ti-bell" style="font-size:15px"></i><span class="notif-dot" id="notif-dot"></span></button>
     </div>
   </div>
 
@@ -1197,7 +1249,7 @@ async function cloudLoad(id){
   }catch(e){console.error(e);}
 }
 async function cloudSave(){if(!CU)return;try{await setDoc(doc(db,'users',CU.uid),D);showSind();}catch(e){console.error(e);}}
-function save(){clearTimeout(saveT);saveT=setTimeout(cloudSave,1400);}
+function save(){clearTimeout(saveT);saveT=setTimeout(cloudSave,1400);try{scheduleNotifications();}catch(e){}}
 function showSind(){const el=document.getElementById('sind');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2000);}
 
 // STREAK — fixed PHT-based day rollover
@@ -1252,6 +1304,7 @@ onAuthStateChanged(auth,async user=>{
     await cloudLoad(user.uid);
     const n=phtNow();calYear=n.getFullYear();calMonth=n.getMonth();calSel=phtToday();
     renderAll();
+    initNotifications();
     // Start day check interval (every minute)
     setInterval(()=>{dayRollover();},60000);
   }else{
@@ -2687,6 +2740,282 @@ try {
     if(ks){ks.textContent='Key saved ✅';ks.style.color='var(--g)';}
   }
 } catch(e){ console.error('AI init error',e); }
+
+// ===================================================================
+// 🔔 NOTIFICATION SYSTEM
+// ===================================================================
+const NOTIF_KEY = 'tracker_notif_v1';
+let _notifTimers = [];
+
+function getNotifSettings(){
+  try{ return JSON.parse(localStorage.getItem(NOTIF_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveNotifSettings(s){ localStorage.setItem(NOTIF_KEY, JSON.stringify(s)); }
+
+function notifGetAllTasks(){
+  const out = [];
+  try {
+    for(const proj of (D.projects||[])){
+      for(const t of (proj.tasks||[])){
+        if(!t.done && t.deadline) out.push({...t, projectName: proj.name});
+      }
+    }
+  } catch(e){}
+  return out;
+}
+
+function clearNotifTimers(){
+  _notifTimers.forEach(clearTimeout);
+  _notifTimers = [];
+}
+
+function fireNotif(title, body, tag){
+  try {
+    if(Notification.permission !== 'granted') return;
+    new Notification(title, {
+      body,
+      tag,
+      icon: 'https://navybye15.github.io/task-tracker/icon-192.png',
+      badge: 'https://navybye15.github.io/task-tracker/icon-192.png',
+      requireInteraction: false,
+      silent: false
+    });
+  } catch(e){}
+}
+
+function scheduleNotifications(){
+  clearNotifTimers();
+  try {
+    const s = getNotifSettings();
+    if(!s.enabled || Notification.permission !== 'granted') return;
+
+    const tasks = notifGetAllTasks();
+    // PHT now
+    const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
+
+    for(const task of tasks){
+      const timeStr = task.deadlineTime || '23:59';
+      // Parse deadline in PHT
+      const [yy,mm,dd] = task.deadline.split('-').map(Number);
+      const [hh,min] = timeStr.split(':').map(Number);
+      const deadline = new Date(yy, mm-1, dd, hh, min, 0);
+
+      const diffMs = deadline - now;
+      const diffMins = diffMs / 60000;
+
+      // Already overdue by less than 2 hours → notify now
+      if(diffMins < 0 && diffMins > -120){
+        const id = setTimeout(()=> fireNotif(
+          '⚠️ Overdue na!',
+          `"${task.name}" (${task.projectName})`,
+          `overdue-${task.id}`
+        ), 1500);
+        _notifTimers.push(id);
+        continue;
+      }
+
+      // 30 min before
+      if(s.times?.includes(30)){
+        const ms = diffMs - 30*60000;
+        if(ms > 0 && ms < 26*3600000){
+          const id = setTimeout(()=> fireNotif(
+            '🔴 30 minutos na lang!',
+            `"${task.name}" (${task.projectName})`,
+            `30m-${task.id}`
+          ), ms);
+          _notifTimers.push(id);
+        }
+      }
+
+      // 3 hours before
+      if(s.times?.includes(180)){
+        const ms = diffMs - 180*60000;
+        if(ms > 0 && ms < 26*3600000){
+          const id = setTimeout(()=> fireNotif(
+            '🟡 3 oras na lang!',
+            `"${task.name}" (${task.projectName})`,
+            `3h-${task.id}`
+          ), ms);
+          _notifTimers.push(id);
+        }
+      }
+
+      // 1 day before — fire at 9am
+      if(s.times?.includes(1440)){
+        const dayBefore = new Date(yy, mm-1, dd-1, 9, 0, 0);
+        const ms = dayBefore - now;
+        if(ms > 0 && ms < 26*3600000){
+          const id = setTimeout(()=> fireNotif(
+            '📅 Bukas na ang deadline!',
+            `"${task.name}" (${task.projectName})`,
+            `1d-${task.id}`
+          ), ms);
+          _notifTimers.push(id);
+        }
+      }
+
+      // Morning of deadline — 8am
+      if(s.morning){
+        const morning = new Date(yy, mm-1, dd, 8, 0, 0);
+        const ms = morning - now;
+        if(ms > 0 && ms < 26*3600000){
+          const id = setTimeout(()=> fireNotif(
+            '🌅 Deadline ngayong araw!',
+            `"${task.name}" (${task.projectName})`,
+            `mrn-${task.id}`
+          ), ms);
+          _notifTimers.push(id);
+        }
+      }
+    }
+
+    // Pass tasks to service worker for background sync
+    notifSendToSW(tasks, s);
+    updateNotifBtnState(true);
+  } catch(e){ console.error('scheduleNotifications error', e); }
+}
+
+function notifSendToSW(tasks, settings){
+  try {
+    if(!navigator.serviceWorker?.controller) return;
+    navigator.serviceWorker.controller.postMessage({
+      type: 'STORE_TASKS',
+      tasks: tasks.map(t=>({
+        id:t.id, name:t.name, deadline:t.deadline,
+        deadlineTime:t.deadlineTime||'', projectName:t.projectName, done:t.done
+      })),
+      settings
+    });
+  } catch(e){}
+}
+
+function updateNotifBtnState(on){
+  try {
+    const btn = document.getElementById('notif-btn');
+    const dot = document.getElementById('notif-dot');
+    if(!btn) return;
+    btn.classList.toggle('on', on);
+    if(dot) dot.classList.toggle('show', on);
+  } catch(e){}
+}
+
+async function registerSW(){
+  if(!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.register('./sw.js', {scope:'./'});
+    // Periodic background sync (Chrome Android, installed PWA)
+    if('periodicSync' in reg){
+      try {
+        const status = await navigator.permissions.query({name:'periodic-background-sync'});
+        if(status.state === 'granted'){
+          await reg.periodicSync.register('check-deadlines',{minInterval: 60*60*1000});
+        }
+      } catch(e){}
+    }
+    // Once SW is active, send tasks
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      const s = getNotifSettings();
+      if(s.enabled) notifSendToSW(notifGetAllTasks(), s);
+    });
+  } catch(e){ console.log('SW registration skipped:', e.message); }
+}
+
+// ── Notification Settings Modal ──
+function openNotifSettings(){
+  const s = getNotifSettings();
+  const times = s.times || [30, 180, 1440];
+
+  document.getElementById('notif-enabled').checked = !!s.enabled;
+  document.getElementById('notif-30min').checked = times.includes(30);
+  document.getElementById('notif-3hr').checked = times.includes(180);
+  document.getElementById('notif-1day').checked = times.includes(1440);
+  document.getElementById('notif-morning').checked = s.morning !== false;
+
+  const badge = document.getElementById('notif-perm-status');
+  if(!('Notification' in window)){
+    badge.textContent = '❌ Hindi supported ang notifications sa browser na ito';
+    badge.style.color = 'var(--red)';
+  } else if(Notification.permission === 'granted'){
+    badge.textContent = '✅ Notifications allowed';
+    badge.style.background = '#0d2010';
+    badge.style.borderColor = 'var(--g2)';
+    badge.style.color = 'var(--g)';
+  } else if(Notification.permission === 'denied'){
+    badge.textContent = '❌ Blocked — i-allow sa Settings ng browser/phone';
+    badge.style.color = 'var(--red)';
+  } else {
+    badge.textContent = '⚠️ Hindi pa naka-allow — i-click Save para humingi ng permission';
+    badge.style.color = '#ffb74d';
+  }
+
+  document.getElementById('notif-modal').classList.add('open');
+}
+
+function closeNotifSettings(){
+  document.getElementById('notif-modal').classList.remove('open');
+}
+
+async function saveNotifSettingsUI(){
+  const enabled = document.getElementById('notif-enabled').checked;
+  const times = [];
+  if(document.getElementById('notif-30min').checked) times.push(30);
+  if(document.getElementById('notif-3hr').checked) times.push(180);
+  if(document.getElementById('notif-1day').checked) times.push(1440);
+  const morning = document.getElementById('notif-morning').checked;
+
+  if(enabled){
+    let perm = Notification.permission;
+    if(perm === 'default') perm = await Notification.requestPermission();
+
+    const badge = document.getElementById('notif-perm-status');
+    if(perm !== 'granted'){
+      badge.textContent = '❌ Permission denied — i-allow sa Settings ng phone';
+      badge.style.color = 'var(--red)';
+      return;
+    }
+
+    saveNotifSettings({enabled:true, times, morning});
+    scheduleNotifications();
+    closeNotifSettings();
+
+    setTimeout(()=> fireNotif(
+      '✅ Reminders ON!',
+      'Magsesend na ako ng notifications para sa mga deadlines mo.',
+      'test-notif'
+    ), 600);
+  } else {
+    saveNotifSettings({enabled:false, times, morning});
+    clearNotifTimers();
+    updateNotifBtnState(false);
+    closeNotifSettings();
+  }
+}
+
+async function initNotifications(){
+  await registerSW();
+  const s = getNotifSettings();
+  if(s.enabled && Notification.permission === 'granted'){
+    scheduleNotifications();
+  } else if(!s.hasOwnProperty('enabled')){
+    // First time — show modal after 4 sec
+    setTimeout(openNotifSettings, 4000);
+  } else {
+    updateNotifBtnState(false);
+  }
+}
+
+// Wire up notification button and modal
+try {
+  document.getElementById('notif-btn').onclick = e => { e.stopPropagation(); openNotifSettings(); };
+  document.getElementById('notif-modal-close').onclick = closeNotifSettings;
+  document.getElementById('notif-save-btn').onclick = saveNotifSettingsUI;
+  document.getElementById('notif-modal').onclick = e => { if(e.target.id==='notif-modal') closeNotifSettings(); };
+} catch(e){ console.error('Notif btn wire error', e); }
+
+// Expose to window
+window.openNotifSettings = openNotifSettings;
+window.closeNotifSettings = closeNotifSettings;
+window.saveNotifSettingsUI = saveNotifSettingsUI;
 </script>
 <!-- NOTES PANEL -->
 <div class="notes-overlay" id="notes-overlay">
@@ -2727,5 +3056,54 @@ try {
     </div>
   </div>
 </div>
+<!-- NOTIFICATION SETTINGS MODAL -->
+<div class="notif-modal-bg" id="notif-modal">
+  <div class="notif-modal">
+    <button class="notif-modal-close" id="notif-modal-close"><i class="ti ti-x"></i></button>
+    <div class="notif-modal-title"><i class="ti ti-bell-ringing" style="font-size:20px"></i>Deadline Reminders</div>
+    <div class="notif-modal-sub">Mag-aabiso ako bago mag-expire ang mga tasks mo — kahit naka-lock ang phone (kapag installed as app).</div>
+    <div class="notif-perm-badge" id="notif-perm-status">Checking...</div>
+
+    <div class="notif-section-title">Master Switch</div>
+    <div class="notif-row">
+      <div class="notif-row-left">
+        <div class="notif-row-label"><i class="ti ti-bell" style="font-size:15px;color:#ffb74d"></i>Enable Notifications</div>
+        <div class="notif-row-sub">I-on para makatanggap ng reminders</div>
+      </div>
+      <label class="toggle-sw"><input type="checkbox" id="notif-enabled"><span class="toggle-track"></span></label>
+    </div>
+
+    <div class="notif-section-title">Remind me…</div>
+    <div class="notif-row">
+      <div class="notif-row-left">
+        <div class="notif-row-label">⏰ 30 minutes before</div>
+      </div>
+      <label class="toggle-sw"><input type="checkbox" id="notif-30min"><span class="toggle-track"></span></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-row-left">
+        <div class="notif-row-label">🟡 3 hours before</div>
+      </div>
+      <label class="toggle-sw"><input type="checkbox" id="notif-3hr"><span class="toggle-track"></span></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-row-left">
+        <div class="notif-row-label">📅 1 day before</div>
+        <div class="notif-row-sub">Mag-aabiso ng 9am, isang araw bago</div>
+      </div>
+      <label class="toggle-sw"><input type="checkbox" id="notif-1day"><span class="toggle-track"></span></label>
+    </div>
+    <div class="notif-row">
+      <div class="notif-row-left">
+        <div class="notif-row-label">🌅 Morning of deadline</div>
+        <div class="notif-row-sub">8am reminder sa araw ng deadline</div>
+      </div>
+      <label class="toggle-sw"><input type="checkbox" id="notif-morning"><span class="toggle-track"></span></label>
+    </div>
+
+    <button class="notif-save-btn" id="notif-save-btn"><i class="ti ti-check" style="font-size:15px"></i>Save & Enable</button>
+  </div>
+</div>
+
 </body>
 </html>
