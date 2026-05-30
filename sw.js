@@ -1,10 +1,9 @@
-// Navi Tracker — Service Worker
-// Handles background deadline notifications
+// Navi Tracker — Service Worker v3
+// Aggressive repeating reminders until task is done
 
-const CACHE = 'navitracker-sw-v2';
+const CACHE = 'navitracker-sw-v3';
 const TASKS_URL = '/task-tracker/sw-tasks';
 
-// Install & activate immediately
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(clients.claim()));
 
@@ -21,13 +20,24 @@ self.addEventListener('message', async e => {
   } catch(err) {}
 });
 
-// ── Periodic Background Sync (Chrome Android, installed TWA/PWA) ──
+// ── Periodic Background Sync ──
 self.addEventListener('periodicsync', e => {
   if(e.tag === 'check-deadlines') e.waitUntil(checkDeadlines());
 });
 
-// ── Also check on SW fetch (fallback trigger) ──
 self.addEventListener('fetch', () => {});
+
+// ── Helper: get current hour-slot and 2hr-slot tags for repeating notifs ──
+// Tags include a time-slot so each interval fires a fresh notification
+function hourSlot(now) {
+  // Changes every 60 minutes — used for "every 1 hour" reminders
+  return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`;
+}
+function twoHourSlot(now) {
+  // Changes every 2 hours — used for overdue reminders
+  const slot = Math.floor(now.getHours() / 2);
+  return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-2h${slot}`;
+}
 
 async function checkDeadlines(){
   try {
@@ -38,7 +48,7 @@ async function checkDeadlines(){
     const {tasks, settings} = await res.json();
     if(!settings?.enabled) return;
 
-    // Get PHT time
+    // PHT time
     const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
 
     for(const task of (tasks||[])){
@@ -52,37 +62,72 @@ async function checkDeadlines(){
       const name = `"${task.name}"`;
       const proj = task.projectName ? ` — ${task.projectName}` : '';
 
-      // Overdue (within 2hrs)
-      if(diffMins < 0 && diffMins > -120){
-        await notify(`⚠️ Overdue na! ${name}`, proj, `ov-${task.id}`);
+      // ── OVERDUE: every 2 hours hanggang ma-check ──
+      if(diffMins < 0){
+        const tag = `ov-${task.id}-${twoHourSlot(now)}`;
+        const minsOverdue = Math.abs(Math.round(diffMins));
+        const overdueTxt = minsOverdue < 60
+          ? `${minsOverdue} minuto na ang nakalipas!`
+          : `${Math.round(minsOverdue/60)} oras na ang nakalipas!`;
+        await notify(
+          `⚠️ OVERDUE! ${name}`,
+          `${overdueTxt}${proj} — Hindi pa tapos!`,
+          tag
+        );
+        continue;
       }
-      // 30 min window
-      else if(settings.times?.includes(30) && diffMins >= 25 && diffMins <= 35){
-        await notify(`🔴 30 minutos na lang! ${name}`, proj, `30m-${task.id}`);
+
+      // ── 10 MINUTES OR LESS: last warning ──
+      if(diffMins <= 10 && diffMins > 0){
+        const minsLeft = Math.round(diffMins);
+        const tag = `10m-${task.id}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${Math.floor(now.getMinutes()/10)}`;
+        await notify(
+          `🔴 ${minsLeft} minuto na lang! ${name}`,
+          `Malapit nang mag-expire!${proj}`,
+          tag
+        );
+        continue;
       }
-      // 3 hour window
-      else if(settings.times?.includes(180) && diffMins >= 170 && diffMins <= 195){
-        await notify(`🟡 3 oras na lang! ${name}`, proj, `3h-${task.id}`);
-      }
-      // Morning of deadline (7:55am - 8:05am)
-      else if(settings.morning && now.getHours()===8 && now.getMinutes()<10 &&
-              deadline.getDate()===now.getDate() && deadline.getMonth()===now.getMonth()){
-        await notify(`🌅 Deadline ngayong araw! ${name}`, proj, `mrn-${task.id}`);
-      }
-      // 1 day before at 9am
-      else if(settings.times?.includes(1440)){
-        const dayBefore = new Date(yy, mm-1, dd-1, 9, 0, 0);
-        const sinceDayBefore = (now - dayBefore) / 60000;
-        if(sinceDayBefore >= 0 && sinceDayBefore < 15){
-          await notify(`📅 Bukas na ang deadline! ${name}`, proj, `1d-${task.id}`);
+
+      // ── WITHIN 1 DAY (up to 1440 mins): every 1 hour ──
+      if(diffMins <= 1440){
+        const tag = `repeat-${task.id}-${hourSlot(now)}`;
+        let msg = '';
+        if(diffMins <= 60){
+          msg = `🔴 ${Math.round(diffMins)} minuto na lang!`;
+        } else if(diffMins <= 180){
+          msg = `🟠 ${Math.round(diffMins/60*10)/10} oras na lang!`;
+        } else if(diffMins <= 360){
+          msg = `🟡 ${Math.round(diffMins/60)} oras na lang!`;
+        } else {
+          const hrs = Math.round(diffMins/60);
+          msg = `📅 ${hrs} oras pa bago mag-deadline!`;
         }
+        await notify(
+          `${msg} ${name}`,
+          `Hindi pa tapos!${proj}`,
+          tag
+        );
+        continue;
+      }
+
+      // ── MORE THAN 1 DAY: once-a-day morning reminder (8am) ──
+      if(now.getHours() === 8 && now.getMinutes() < 15){
+        const daysLeft = Math.floor(diffMins / 1440);
+        const tag = `daily-${task.id}-${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+        await notify(
+          `📋 ${daysLeft} araw pa bago mag-deadline! ${name}`,
+          `Huwag kalimutan!${proj}`,
+          tag
+        );
       }
     }
   } catch(err) {}
 }
 
 async function notify(title, body, tag){
-  // Avoid duplicate notifications
+  // Each unique tag = unique notification slot
+  // Different tags per time-slot = allows repeat firing
   const existing = await self.registration.getNotifications({tag});
   if(existing.length > 0) return;
 
@@ -91,8 +136,8 @@ async function notify(title, body, tag){
     tag,
     icon: '/task-tracker/icon-192.png',
     badge: '/task-tracker/icon-192.png',
-    requireInteraction: false,
-    vibrate: [200, 100, 200]
+    requireInteraction: true,
+    vibrate: [200, 100, 200, 100, 200]
   });
 }
 
