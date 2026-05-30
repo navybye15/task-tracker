@@ -1,7 +1,7 @@
-// Task Tracker — Service Worker
+// Navi Tracker — Service Worker
 // Handles background deadline notifications
 
-const CACHE = 'tracker-sw-v1';
+const CACHE = 'navitracker-sw-v2';
 const TASKS_URL = '/task-tracker/sw-tasks';
 
 // Install & activate immediately
@@ -21,12 +21,12 @@ self.addEventListener('message', async e => {
   } catch(err) {}
 });
 
-// ── Periodic Background Sync (Chrome Android, installed PWA) ──
+// ── Periodic Background Sync (Chrome Android, installed TWA/PWA) ──
 self.addEventListener('periodicsync', e => {
   if(e.tag === 'check-deadlines') e.waitUntil(checkDeadlines());
 });
 
-// ── Also check on SW fetch (fallback for non-periodic browsers) ──
+// ── Also check on SW fetch (fallback trigger) ──
 self.addEventListener('fetch', () => {});
 
 async function checkDeadlines(){
@@ -50,31 +50,31 @@ async function checkDeadlines(){
       const diffMins = (deadline - now) / 60000;
 
       const name = `"${task.name}"`;
-      const proj = task.projectName || '';
+      const proj = task.projectName ? ` — ${task.projectName}` : '';
 
       // Overdue (within 2hrs)
       if(diffMins < 0 && diffMins > -120){
-        await notify(`⚠️ Overdue na! — ${name}`, proj, `ov-${task.id}`);
+        await notify(`⚠️ Overdue na! ${name}`, proj, `ov-${task.id}`);
       }
       // 30 min window
       else if(settings.times?.includes(30) && diffMins >= 25 && diffMins <= 35){
-        await notify(`🔴 30 minutos na lang! — ${name}`, proj, `30m-${task.id}`);
+        await notify(`🔴 30 minutos na lang! ${name}`, proj, `30m-${task.id}`);
       }
       // 3 hour window
       else if(settings.times?.includes(180) && diffMins >= 170 && diffMins <= 195){
-        await notify(`🟡 3 oras na lang! — ${name}`, proj, `3h-${task.id}`);
+        await notify(`🟡 3 oras na lang! ${name}`, proj, `3h-${task.id}`);
       }
       // Morning of deadline (7:55am - 8:05am)
       else if(settings.morning && now.getHours()===8 && now.getMinutes()<10 &&
               deadline.getDate()===now.getDate() && deadline.getMonth()===now.getMonth()){
-        await notify(`🌅 Deadline ngayong araw! — ${name}`, proj, `mrn-${task.id}`);
+        await notify(`🌅 Deadline ngayong araw! ${name}`, proj, `mrn-${task.id}`);
       }
       // 1 day before at 9am
       else if(settings.times?.includes(1440)){
         const dayBefore = new Date(yy, mm-1, dd-1, 9, 0, 0);
         const sinceDayBefore = (now - dayBefore) / 60000;
         if(sinceDayBefore >= 0 && sinceDayBefore < 15){
-          await notify(`📅 Bukas na ang deadline! — ${name}`, proj, `1d-${task.id}`);
+          await notify(`📅 Bukas na ang deadline! ${name}`, proj, `1d-${task.id}`);
         }
       }
     }
@@ -89,8 +89,8 @@ async function notify(title, body, tag){
   await self.registration.showNotification(title, {
     body,
     tag,
-    icon: 'https://navybye15.github.io/task-tracker/icon-192.png',
-    badge: 'https://navybye15.github.io/task-tracker/icon-192.png',
+    icon: '/task-tracker/icon-192.png',
+    badge: '/task-tracker/icon-192.png',
     requireInteraction: false,
     vibrate: [200, 100, 200]
   });
