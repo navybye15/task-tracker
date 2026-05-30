@@ -2753,10 +2753,11 @@ try {
 } catch(e){ console.error('AI init error',e); }
 
 // ===================================================================
-// 🔔 NOTIFICATION SYSTEM
+// 🔔 NOTIFICATION SYSTEM — Aggressive Repeating Reminders
 // ===================================================================
 const NOTIF_KEY = 'tracker_notif_v1';
 let _notifTimers = [];
+let _notifInterval = null; // foreground checker every 1 min
 
 function getNotifSettings(){
   try{ return JSON.parse(localStorage.getItem(NOTIF_KEY)) || {}; }catch(e){ return {}; }
@@ -2778,6 +2779,7 @@ function notifGetAllTasks(){
 function clearNotifTimers(){
   _notifTimers.forEach(clearTimeout);
   _notifTimers = [];
+  if(_notifInterval){ clearInterval(_notifInterval); _notifInterval = null; }
 }
 
 function fireNotif(title, body, tag){
@@ -2788,10 +2790,85 @@ function fireNotif(title, body, tag){
       tag,
       icon: 'https://navybye15.github.io/task-tracker/icon-192.png',
       badge: 'https://navybye15.github.io/task-tracker/icon-192.png',
-      requireInteraction: false,
-      silent: false
+      requireInteraction: true,
+      silent: false,
+      vibrate: [200,100,200,100,200]
     });
   } catch(e){}
+}
+
+// ── Core checker — runs every minute when app is open ──
+function checkAndFireNotifs(){
+  try {
+    const s = getNotifSettings();
+    if(!s.enabled || Notification.permission !== 'granted') return;
+
+    const tasks = notifGetAllTasks();
+    const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
+    // slot keys — changes per hour, per 2hrs, per 10mins
+    const hSlot  = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}`;
+    const h2Slot = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-2h${Math.floor(now.getHours()/2)}`;
+    const m10Slot= `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${now.getHours()}-${Math.floor(now.getMinutes()/10)}`;
+    const daySlot= `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
+    for(const task of tasks){
+      if(task.done || !task.deadline) continue;
+      const [yy,mm,dd] = task.deadline.split('-').map(Number);
+      const [hh,min]   = (task.deadlineTime||'23:59').split(':').map(Number);
+      const deadline   = new Date(yy, mm-1, dd, hh, min, 0);
+      const diffMins   = (deadline - now) / 60000;
+      const name = `"${task.name}"`;
+      const proj = task.projectName ? ` — ${task.projectName}` : '';
+
+      // ── OVERDUE: every 2 hours ──
+      if(diffMins < 0){
+        const minsOv = Math.abs(Math.round(diffMins));
+        const ovTxt  = minsOv < 60 ? `${minsOv} minuto` : `${Math.floor(minsOv/60)} oras at ${minsOv%60} minuto`;
+        fireNotif(
+          `⚠️ OVERDUE! ${name}`,
+          `${ovTxt} na ang nakalipas! Hindi pa tapos!${proj}`,
+          `ov-${task.id}-${h2Slot}`
+        );
+        continue;
+      }
+
+      // ── 10 MINS OR LESS: every ~10 mins ──
+      if(diffMins <= 10){
+        fireNotif(
+          `🔴 ${Math.round(diffMins)} minuto na lang! ${name}`,
+          `LAST WARNING! Malapit nang mag-expire!${proj}`,
+          `10m-${task.id}-${m10Slot}`
+        );
+        continue;
+      }
+
+      // ── 1 DAY OR LESS: every 1 hour ──
+      if(diffMins <= 1440){
+        let emoji, msg;
+        if(diffMins <= 30)       { emoji='🔴'; msg=`${Math.round(diffMins)} minuto na lang!`; }
+        else if(diffMins <= 60)  { emoji='🔴'; msg=`Wala pang isang oras!`; }
+        else if(diffMins <= 180) { emoji='🟠'; msg=`${Math.round(diffMins/60*10)/10} oras na lang!`; }
+        else if(diffMins <= 360) { emoji='🟡'; msg=`${Math.round(diffMins/60)} oras na lang!`; }
+        else                     { emoji='📅'; msg=`${Math.round(diffMins/60)} oras pa bago mag-deadline!`; }
+        fireNotif(
+          `${emoji} ${msg} ${name}`,
+          `Hindi pa tapos! I-check na!${proj}`,
+          `repeat-${task.id}-${hSlot}`
+        );
+        continue;
+      }
+
+      // ── MORE THAN 1 DAY: 8am daily reminder only ──
+      if(now.getHours() === 8 && now.getMinutes() < 10){
+        const daysLeft = Math.floor(diffMins/1440);
+        fireNotif(
+          `📋 ${daysLeft} araw pa bago mag-deadline! ${name}`,
+          `Huwag kalimutan!${proj}`,
+          `daily-${task.id}-${daySlot}`
+        );
+      }
+    }
+  } catch(e){ console.error('checkAndFireNotifs error', e); }
 }
 
 function scheduleNotifications(){
@@ -2800,87 +2877,14 @@ function scheduleNotifications(){
     const s = getNotifSettings();
     if(!s.enabled || Notification.permission !== 'granted') return;
 
+    // Run immediately on open
+    checkAndFireNotifs();
+
+    // Then check every 60 seconds while app is open
+    _notifInterval = setInterval(checkAndFireNotifs, 60 * 1000);
+
+    // Send to SW for background
     const tasks = notifGetAllTasks();
-    // PHT now
-    const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Manila'}));
-
-    for(const task of tasks){
-      const timeStr = task.deadlineTime || '23:59';
-      // Parse deadline in PHT
-      const [yy,mm,dd] = task.deadline.split('-').map(Number);
-      const [hh,min] = timeStr.split(':').map(Number);
-      const deadline = new Date(yy, mm-1, dd, hh, min, 0);
-
-      const diffMs = deadline - now;
-      const diffMins = diffMs / 60000;
-
-      // Already overdue by less than 2 hours → notify now
-      if(diffMins < 0 && diffMins > -120){
-        const id = setTimeout(()=> fireNotif(
-          '⚠️ Overdue na!',
-          `"${task.name}" (${task.projectName})`,
-          `overdue-${task.id}`
-        ), 1500);
-        _notifTimers.push(id);
-        continue;
-      }
-
-      // 30 min before
-      if(s.times?.includes(30)){
-        const ms = diffMs - 30*60000;
-        if(ms > 0 && ms < 26*3600000){
-          const id = setTimeout(()=> fireNotif(
-            '🔴 30 minutos na lang!',
-            `"${task.name}" (${task.projectName})`,
-            `30m-${task.id}`
-          ), ms);
-          _notifTimers.push(id);
-        }
-      }
-
-      // 3 hours before
-      if(s.times?.includes(180)){
-        const ms = diffMs - 180*60000;
-        if(ms > 0 && ms < 26*3600000){
-          const id = setTimeout(()=> fireNotif(
-            '🟡 3 oras na lang!',
-            `"${task.name}" (${task.projectName})`,
-            `3h-${task.id}`
-          ), ms);
-          _notifTimers.push(id);
-        }
-      }
-
-      // 1 day before — fire at 9am
-      if(s.times?.includes(1440)){
-        const dayBefore = new Date(yy, mm-1, dd-1, 9, 0, 0);
-        const ms = dayBefore - now;
-        if(ms > 0 && ms < 26*3600000){
-          const id = setTimeout(()=> fireNotif(
-            '📅 Bukas na ang deadline!',
-            `"${task.name}" (${task.projectName})`,
-            `1d-${task.id}`
-          ), ms);
-          _notifTimers.push(id);
-        }
-      }
-
-      // Morning of deadline — 8am
-      if(s.morning){
-        const morning = new Date(yy, mm-1, dd, 8, 0, 0);
-        const ms = morning - now;
-        if(ms > 0 && ms < 26*3600000){
-          const id = setTimeout(()=> fireNotif(
-            '🌅 Deadline ngayong araw!',
-            `"${task.name}" (${task.projectName})`,
-            `mrn-${task.id}`
-          ), ms);
-          _notifTimers.push(id);
-        }
-      }
-    }
-
-    // Pass tasks to service worker for background sync
     notifSendToSW(tasks, s);
     updateNotifBtnState(true);
   } catch(e){ console.error('scheduleNotifications error', e); }
@@ -2914,22 +2918,19 @@ async function registerSW(){
   if(!('serviceWorker' in navigator)) return;
   try {
     const reg = await navigator.serviceWorker.register('/task-tracker/sw.js', {scope:'/task-tracker/'});
-    // Periodic background sync (Chrome Android, installed TWA/PWA)
     if('periodicSync' in reg){
       try {
         const status = await navigator.permissions.query({name:'periodic-background-sync'});
         if(status.state === 'granted'){
-          await reg.periodicSync.register('check-deadlines',{minInterval: 15*60*1000}); // every 15 mins
+          await reg.periodicSync.register('check-deadlines',{minInterval: 15*60*1000});
         }
       } catch(e){}
     }
-    // Send tasks to SW whenever controller changes or becomes active
     const sendTasks = () => {
       const s = getNotifSettings();
       if(s.enabled) notifSendToSW(notifGetAllTasks(), s);
     };
     navigator.serviceWorker.addEventListener('controllerchange', sendTasks);
-    // Also send immediately if SW already active
     if(reg.active) sendTasks();
   } catch(e){ console.log('SW registration skipped:', e.message); }
 }
@@ -3012,7 +3013,6 @@ async function initNotifications(){
   if(s.enabled && Notification.permission === 'granted'){
     scheduleNotifications();
   } else if(!s.hasOwnProperty('enabled')){
-    // First time — ask permission immediately (best for TWA/APK)
     openNotifSettings();
   } else {
     updateNotifBtnState(false);
