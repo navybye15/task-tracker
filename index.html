@@ -2913,21 +2913,24 @@ function updateNotifBtnState(on){
 async function registerSW(){
   if(!('serviceWorker' in navigator)) return;
   try {
-    const reg = await navigator.serviceWorker.register('./sw.js', {scope:'./'});
-    // Periodic background sync (Chrome Android, installed PWA)
+    const reg = await navigator.serviceWorker.register('/task-tracker/sw.js', {scope:'/task-tracker/'});
+    // Periodic background sync (Chrome Android, installed TWA/PWA)
     if('periodicSync' in reg){
       try {
         const status = await navigator.permissions.query({name:'periodic-background-sync'});
         if(status.state === 'granted'){
-          await reg.periodicSync.register('check-deadlines',{minInterval: 60*60*1000});
+          await reg.periodicSync.register('check-deadlines',{minInterval: 15*60*1000}); // every 15 mins
         }
       } catch(e){}
     }
-    // Once SW is active, send tasks
-    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    // Send tasks to SW whenever controller changes or becomes active
+    const sendTasks = () => {
       const s = getNotifSettings();
       if(s.enabled) notifSendToSW(notifGetAllTasks(), s);
-    });
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', sendTasks);
+    // Also send immediately if SW already active
+    if(reg.active) sendTasks();
   } catch(e){ console.log('SW registration skipped:', e.message); }
 }
 
@@ -2987,6 +2990,7 @@ async function saveNotifSettingsUI(){
 
     saveNotifSettings({enabled:true, times, morning});
     scheduleNotifications();
+    notifSendToSW(notifGetAllTasks(), {enabled:true, times, morning});
     closeNotifSettings();
 
     setTimeout(()=> fireNotif(
@@ -3008,8 +3012,8 @@ async function initNotifications(){
   if(s.enabled && Notification.permission === 'granted'){
     scheduleNotifications();
   } else if(!s.hasOwnProperty('enabled')){
-    // First time — show modal after 4 sec
-    setTimeout(openNotifSettings, 4000);
+    // First time — ask permission immediately (best for TWA/APK)
+    openNotifSettings();
   } else {
     updateNotifBtnState(false);
   }
